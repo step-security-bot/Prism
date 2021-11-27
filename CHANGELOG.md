@@ -1,5 +1,12 @@
 # Prism change log
 
+2.3.0
+* Updated for Rack2 API
+* Rainbow: new panel and LED palette by Pyer
+* Rainbow Expander: updated panel
+* Droplet: new panel by Pyer
+* Droplet: only process if there's an input
+
 ## Rainbow
 
 1.2.0
