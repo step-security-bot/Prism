@@ -40,18 +40,14 @@ struct LED : Widget {
 	}
 
 	void draw(const DrawArgs& args) override {
-	// void drawLayer(const DrawArgs& args, int layer) override {
-	// 	if (layer == 1) {
-			nvgFillColor(args.vg, color);
-			nvgStrokeColor(args.vg, colorBorder);
-			nvgStrokeWidth(args.vg, ledStrokeWidth);
-			nvgBeginPath(args.vg);
-			nvgMoveTo(args.vg, 0.0f, 0.0f);
-			nvgCircle(args.vg, xCenter, yCenter, ledRadius);
-			nvgFill(args.vg);
-			nvgStroke(args.vg);
-		// }
-		// Widget::drawLayer(args, layer);
+		nvgFillColor(args.vg, color);
+		nvgStrokeColor(args.vg, colorBorder);
+		nvgStrokeWidth(args.vg, ledStrokeWidth);
+		nvgBeginPath(args.vg);
+		nvgMoveTo(args.vg, 0.0f, 0.0f);
+		nvgCircle(args.vg, xCenter, yCenter, ledRadius);
+		nvgFill(args.vg);
+		nvgStroke(args.vg);
 	}
 
 	void onButton(const event::Button &e) override;
