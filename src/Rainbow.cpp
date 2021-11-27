@@ -447,6 +447,33 @@ struct Rainbow : core::PrismModule {
 		configParam(SCALECW_PARAM, 0, 1, 0, "Scale CW/Up"); 
 		configParam(SCALECCW_PARAM, 0, 1, 0, "Scale CCW/Down"); 
 
+		configInput(POLY_IN_INPUT, "Poly audio");
+    	configOutput(POLY_OUT_OUTPUT, "Poly audio");
+    	configOutput(POLY_ENV_OUTPUT, "Poly envelope");
+    	configOutput(POLY_VOCT_OUTPUT, "Poly V/Oct");
+
+		configInput(GLOBAL_LEVEL_INPUT, "Global level");
+		configInput(GLOBAL_Q_INPUT, "Global Q");
+		configInput(SPREAD_INPUT, "Spread CV");
+		configInput(MORPH_INPUT, "Morph CV");
+		configInput(POLY_LEVEL_INPUT, "Poly level CV");
+		configInput(POLY_Q_INPUT, "Poly Q");
+		configInput(SCALE_INPUT, "Scale CV");
+		configInput(ROTATECV_INPUT, "Rotate CV");
+		configInput(FREQCV1_INPUT, "Frequency 1-135 CV");
+		configInput(FREQCV6_INPUT, "Frequency 6-246 CV");
+		configInput(ROTCW_INPUT, "Rotate clockwise CV");
+		configInput(ROTCCW_INPUT, "Rotate counter-clockwise CV");
+		configInput(LOCK135_INPUT, "Lock 1-135");
+		configInput(LOCK246_INPUT, "Lock 6-246");
+
+		for (int i = 0; i < 6; i++) {
+			configInput(MONO_LEVEL_INPUT + i, string::f("Mono level CV %i", i + 1));
+			configInput(MONO_Q_INPUT + i, string::f("Mono Q %i", i + 1));
+			configOutput(MONO_VOCT_OUTPUT + i, string::f("Mono V/Oct %i", i + 1));
+			configOutput(MONO_ENV_OUTPUT + i, string::f("Mono envelope %i", i + 1));
+		}
+
 		for (int n = 0; n < 6; n++) {
 			configParam(CHANNEL_LEVEL_PARAM + n, 0, 4095, 4095, "Channel Level");
 			configParam(LEVEL_OUT_PARAM + n, 0, 2, 1, "Channel Level");
@@ -461,6 +488,8 @@ struct Rainbow : core::PrismModule {
 			vuMeters[n].mode = dsp::VuMeter2::RMS;
 			channelClipCnt[n] = 0;
 		}
+
+    	configBypass(POLY_IN_INPUT, POLY_OUT_OUTPUT);		
 
 		lightDivider.setDivision(256);
 

@@ -57,11 +57,13 @@ struct Droplet : core::PrismModule {
 		configSwitch(ENV_PARAM, 0, 2, 0, "Envelope", {"fast", "slow", "trigger"});
 		configSwitch(NOISE_PARAM, 0, 2, 0, "Noise", {"brown", "pink", "white"});
 
-		configInput(Q_INPUT, "Q");
-		configInput(FREQ_INPUT, "Frequency");
+		configInput(Q_INPUT, "Q CV");
+		configInput(FREQ_INPUT, "Frequency CV");
 		configInput(IN_INPUT, "Audio");
 		configOutput(OUT_OUTPUT, "Audio");
 		configOutput(ENV_OUTPUT, "Envelope");
+
+		configBypass(IN_INPUT, OUT_OUTPUT);
 
 		filter.configure(&io);
 		filter.initialise();
