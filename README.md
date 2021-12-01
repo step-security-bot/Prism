@@ -4,7 +4,7 @@ Prism is a plugin for the VCV virtual Eurorack environment.
 
 * Rainbow - a port of the 4ms SMR module to the VCV system.
 * Spectrum - an expander module for Rainbow. It creates User Scales for Rainbow.
-* Droplet -  the filter from Rainbow as a separate module.
+* Droplet - a port of the 4ms SMR MaxQ band-pass resonant filter 
 
 The latest release is available through the [VCV Library](https://library.vcvrack.com/?brand=Prism). 
 
