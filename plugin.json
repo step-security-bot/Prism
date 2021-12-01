@@ -15,7 +15,7 @@
 			"slug": "Rainbow",
 			"name": "Rainbow",
 			"description": "A multiband band-pass resonant filter, a port of the 4ms SMR",
-			"tags": ["Physical modeling", "VCF"]
+			"tags": ["Physical modeling", "VCF", "Hardware clone"]
 		},
 		{
 			"slug": "RainbowScaleExpander",
@@ -27,7 +27,7 @@
 			"slug": "Droplet",
 			"name": "Droplet",
 			"description": "A band-pass resonant filter, a port of the 4ms SMR MaxQ filter",
-			"tags": ["Physical modeling", "VCF"]
+			"tags": ["Physical modeling", "VCF", "Hardware clone"]
 		}
 	]
 }
