@@ -505,7 +505,7 @@ void MaxQFilter::onepass(FilterBank *fb, int channel_num, float **filter_out) {
 	float tmp;
 	float iir;
 
-	float destvoct;
+	float destvoct = 0.0f;
 
 	fb->io->INPUT_CLIP = false;
 
