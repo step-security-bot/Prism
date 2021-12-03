@@ -1,4 +1,7 @@
 # Prism change log
+2.3.1 - 2.3.2
+* Added hardware tags
+* Misc plugin.json updates
 
 2.3.0
 * Updated for Rack2 API
