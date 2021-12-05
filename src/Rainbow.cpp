@@ -13,7 +13,7 @@ using namespace rainbow;
 
 struct Rainbow;
 
-struct LED : Widget {
+struct LED : LightWidget {
 
 	NVGcolor color;
 	NVGcolor colorBorder;
@@ -39,7 +39,8 @@ struct LED : Widget {
 		yCenter = ctr.y / SVG_DPI;
 	}
 
-	void draw(const DrawArgs& args) override {
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1) return;
 		nvgFillColor(args.vg, color);
 		nvgStrokeColor(args.vg, colorBorder);
 		nvgStrokeWidth(args.vg, ledStrokeWidth);
@@ -48,6 +49,7 @@ struct LED : Widget {
 		nvgCircle(args.vg, xCenter, yCenter, ledRadius);
 		nvgFill(args.vg);
 		nvgStroke(args.vg);
+		LightWidget::drawLayer(args, layer);
 	}
 
 	void onButton(const event::Button &e) override;
@@ -830,7 +832,7 @@ void Rainbow::process(const ProcessArgs &args) {
 			if (io.FREQ_BLOCK[i]) {
 				ringLEDs[i]->color 			= nvgRGBf(0.0f, 0.0f, 0.0f);
 				ringLEDs[i]->colorBorder 	= blockedBorder;
-			} else {
+			} else if (ringLEDs[i]) {
 				ringLEDs[i]->color = nvgRGBf(
 					io.ring[i][0], 
 					io.ring[i][1],
@@ -840,11 +842,13 @@ void Rainbow::process(const ProcessArgs &args) {
 		}
 
 		for (int i = 0; i < NUM_SCALES; i++) {
-			scaleLEDs[i]->color = nvgRGBf(
-				io.scale[i][0], 
-				io.scale[i][1],
-				io.scale[i][2]);
-			scaleLEDs[i]->colorBorder = defaultBorder;
+			if (scaleLEDs[i]) {
+				scaleLEDs[i]->color = nvgRGBf(
+					io.scale[i][0], 
+					io.scale[i][1],
+					io.scale[i][2]);
+				scaleLEDs[i]->colorBorder = defaultBorder;
+			}
 		}
 
 		bool procVu = lightDivider.process();
@@ -857,7 +861,7 @@ void Rainbow::process(const ProcessArgs &args) {
 			if (channelClipCnt[i] & 32) {
 				envelopeLEDs[i]->color = nvgRGBf(0.0f, 0.0f, 0.0f);
 				envelopeLEDs[i]->colorBorder = defaultBorder;
-			} else {
+			} else if (envelopeLEDs[i]) {
 				envelopeLEDs[i]->color = nvgRGBf(
 					io.envelope_leds[i][0], 
 					io.envelope_leds[i][1],
@@ -865,18 +869,21 @@ void Rainbow::process(const ProcessArgs &args) {
 				envelopeLEDs[i]->colorBorder = defaultBorder;
 			}
 
-			qLEDs[i]->color = nvgRGBf(
-				io.q_leds[i][0], 
-				io.q_leds[i][1],
-				io.q_leds[i][2]);
-			qLEDs[i]->colorBorder = defaultBorder;
+			if (qLEDs[i]) {
+				qLEDs[i]->color = nvgRGBf(
+					io.q_leds[i][0], 
+					io.q_leds[i][1],
+					io.q_leds[i][2]);
+				qLEDs[i]->colorBorder = defaultBorder;
+			}
 
-			tuningLEDs[i]->color = nvgHSL(
-				io.tuning_out_leds[i][0], 
-				io.tuning_out_leds[i][1],
-				io.tuning_out_leds[i][2]);
-			tuningLEDs[i]->colorBorder = defaultBorder;
-
+			if (tuningLEDs[i]) {
+				tuningLEDs[i]->color = nvgHSL(
+					io.tuning_out_leds[i][0], 
+					io.tuning_out_leds[i][1],
+					io.tuning_out_leds[i][2]);
+				tuningLEDs[i]->colorBorder = defaultBorder;
+			}
 		}
 	}
 }
@@ -1079,7 +1086,6 @@ struct BankWidget : Widget {
 		
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font) {
-			nvgGlobalTint(ctx.vg, color::WHITE);
 			nvgFontSize(ctx.vg, 12.0f);
 			nvgFontFaceId(ctx.vg, font->handle);
 
