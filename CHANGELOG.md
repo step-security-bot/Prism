@@ -1,4 +1,7 @@
 # Prism change log
+2.3.3
+* DarkMode LED fix - seems to also help with intermittent crashes on patch load
+
 2.3.1 - 2.3.2
 * Added hardware tags
 * Misc plugin.json updates
