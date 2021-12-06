@@ -367,8 +367,8 @@ struct IO {
 	bool					GLIDE_SWITCH;
 	EnvelopeMode			ENV_SWITCH;
 
-	bool					CHANNEL_Q_ON[NUM_CHANNELS];
-	bool					LOCK_ON[NUM_CHANNELS];
+	bool					CHANNEL_Q_ON[NUM_CHANNELS] = { false };
+	bool					LOCK_ON[NUM_CHANNELS] = { false };
 	int8_t					TRANS_DIAL[NUM_CHANNELS];
 
 	// CV Rotate

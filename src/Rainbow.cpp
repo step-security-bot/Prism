@@ -504,7 +504,7 @@ struct Rainbow : core::PrismModule {
 		levels.configure(&io);
 		input.configure(&io, &rotation, &envelope, &filterbank, &tuning, &levels);
 
-		initialise();
+		// initialise(); // gets called by onReset()
 
 		rightExpander.producerMessage = pMessage;
 		rightExpander.consumerMessage = cMessage;
@@ -513,7 +513,7 @@ struct Rainbow : core::PrismModule {
 		cMessage->updated = false;
 
 		onSampleRateChange();
-
+		onReset(); // calls initialise()
 	}
 
 	void onSampleRateChange() override {
@@ -540,7 +540,6 @@ struct Rainbow : core::PrismModule {
 	}
 
 	void process(const ProcessArgs &args) override;
-
 };
 
 void Rainbow::process(const ProcessArgs &args) {
@@ -829,7 +828,7 @@ void Rainbow::process(const ProcessArgs &args) {
 		}
 
 		for (int i = 0; i < NUM_FILTS; i++) {
-			if (io.FREQ_BLOCK[i]) {
+			if (io.FREQ_BLOCK[i] && ringLEDs[i]) {
 				ringLEDs[i]->color 			= nvgRGBf(0.0f, 0.0f, 0.0f);
 				ringLEDs[i]->colorBorder 	= blockedBorder;
 			} else if (ringLEDs[i]) {
@@ -898,9 +897,7 @@ void Rainbow::initialise(void) {
 	rotation.update_spread(1);
 
 	tuning.initialise();
-
 	envelope.initialise();
-
 } 
 
 void Rainbow::prepare(void) {
