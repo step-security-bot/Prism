@@ -16,4 +16,4 @@ Rainbow and Spectrum use source code from the 4ms Spectral Multiband Resonator f
 
 The user interface was created by Pierre Collard - my enormous thanks to him for the fantastic work!
 
-All graphical elements are copyright Pierre Collard licensed under the Creative Commons SA license.
+All graphical elements are copyright Pierre Collard licensed under the [Creative Commons SA license 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
