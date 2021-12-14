@@ -34,6 +34,14 @@
 #define SLIDEREDITNOTE_LPF 0.980
 #define CENTER_PLATEAU 80
 
+struct RainbowScaleExpanderMessage {
+	float maxq48[NUM_BANKNOTES];
+	float maxq96[NUM_BANKNOTES];
+	bool updated;
+};
+
+namespace rainbow {
+
 enum FilterModes {
 	TWOPASS = 2,
 	ONEPASS = 3
@@ -83,14 +91,6 @@ enum EnvelopeMode {
 };
 
 uint32_t diff(uint32_t a, uint32_t b);
-
-struct RainbowScaleExpanderMessage {
-	float maxq48[NUM_BANKNOTES];
-	float maxq96[NUM_BANKNOTES];
-	bool updated;
-};
-
-namespace rainbow {
 
 struct TFilter;
 struct MaxQFilter;

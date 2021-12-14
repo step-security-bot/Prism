@@ -17,6 +17,8 @@
 #define SLIDEREDITNOTE_LPF 0.980
 #define CENTER_PLATEAU 80
 
+namespace droplet {
+
 enum FilterSetting {
 	TwoPass = 0,
 	OnePass
@@ -29,8 +31,6 @@ enum EnvelopeMode {
 };
 
 uint32_t diff(uint32_t a, uint32_t b);
-
-namespace droplet {
 
 struct Audio;
 struct Filter;
