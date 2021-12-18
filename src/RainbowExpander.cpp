@@ -1271,6 +1271,8 @@ struct ExpanderBankWidget : Widget {
 	}
 };
 
+static void filePathSelected(RainbowScaleExpander *module, char* path);
+
 static void loadFile(RainbowScaleExpander *module) {
 
 	std::string dir;
@@ -1284,17 +1286,31 @@ static void loadFile(RainbowScaleExpander *module) {
 		filename = "";
 	}
 
+#ifdef USING_CARDINAL_NOT_RACK
+	async_dialog_filebrowser(false, dir.c_str(), "Load Scala file", [module](char* path) {
+		filePathSelected(module, path);
+	});
+#else
 	osdialog_filters *filter = osdialog_filters_parse("Scala file:scl");
 	char *path = osdialog_file(OSDIALOG_OPEN, dir.c_str(), filename.c_str(), filter);
+	filePathSelected(module, path);
+	osdialog_filters_free(filter);
+#endif
+}
+
+static void filePathSelected(RainbowScaleExpander *module, char* path) {
 	if (path) {
 		module->path = path;
 		if (!module->scala.load(path)) {
 			std::string message = module->scala.lastError;
+#ifdef USING_CARDINAL_NOT_RACK
+			async_dialog_message(message.c_str());
+#else
 			osdialog_message(OSDIALOG_WARNING, OSDIALOG_OK, message.c_str());
+#endif
 		}
 		free(path);
 	}
-	osdialog_filters_free(filter);
 }
 
 static void applyFile(RainbowScaleExpander *module) {
@@ -1303,7 +1319,11 @@ static void applyFile(RainbowScaleExpander *module) {
 		module->applyScale();
 	} else {
 		std::string message = "No Scala file loaded";
+#ifdef USING_CARDINAL_NOT_RACK
+		async_dialog_message(message.c_str());
+#else
 		osdialog_message(OSDIALOG_WARNING, OSDIALOG_OK, message.c_str());
+#endif
 	}
 
 }
