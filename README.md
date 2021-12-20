@@ -1,6 +1,6 @@
 [![Build VCV Rack Plugin](https://github.com/SteveRussell33/Prism/actions/workflows/build-plugin.yml/badge.svg)](https://github.com/SteveRussell33/Prism/actions/workflows/build-plugin.yml)
 
-Prism is a plugin for the VCV virtual Eurorack environment.
+Prism is a plugin for the VCV virtual Eurorack environment. 
 
 ![All](./doc/all.jpg)
 
@@ -9,6 +9,8 @@ Prism is a plugin for the VCV virtual Eurorack environment.
 * Droplet - a port of the 4ms SMR MaxQ band-pass resonant filter.
 
 The latest release is available through the [VCV Library](https://library.vcvrack.com/?brand=Prism). 
+
+[Changelog](https://github.com/SteveRussell33/Prism/blob/Rack2/CHANGELOG.md)
 
 NB: This version is for Rack 2; if you need a build for Rack v1, please check out and build the master branch.
 
