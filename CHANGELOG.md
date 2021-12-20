@@ -1,4 +1,7 @@
 # Prism change log
+2.3.4
+* Fix intermittent wayward output levels in audio processor
+
 2.3.3
 * DarkMode LED fix - seems to also help with intermittent crashes on patch load
 
