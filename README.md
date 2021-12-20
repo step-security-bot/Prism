@@ -1,3 +1,5 @@
+[![Build VCV Rack Plugin](https://github.com/SteveRussell33/Prism/actions/workflows/build-plugin.yml/badge.svg)](https://github.com/SteveRussell33/Prism/actions/workflows/build-plugin.yml)
+
 Prism is a plugin for the VCV virtual Eurorack environment.
 
 ![All](./doc/all.jpg)
