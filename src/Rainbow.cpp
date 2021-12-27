@@ -427,6 +427,7 @@ struct Rainbow : core::PrismModule {
 		configParam(MORPH_PARAM, 0, 4095, 0, "Morph");
 		configParam(SLEW_PARAM, 0, 4095, 0, "Channel slew speed"); // 0% slew
 		configSwitch(FILTER_PARAM, 0, 2, 0, "Filter type", {"2-pass", "1-pass", "bpre"});
+		getParamQuantity(FILTER_PARAM)->snapEnabled = true;
 		configButton(VOCTGLIDE_PARAM, "V/Oct glide");
 		configButton(SCALEROT_PARAM, "Scale rotation");
 		configButton(PREPOST_PARAM, "Envelope");
