@@ -614,7 +614,7 @@ void MaxQFilter::twopass(FilterBank *fb, int channel_num, float **filter_out) {
 
 	// QVAL ADJUSTMENTS
 	// first filter max Q at noon on Q knob
-	qval_a= qc * 2.0f;
+	qval_a = qc * 2.0f;
 	if (qval_a > 4095.0f) {
 		qval_a = 4095.0f;
 	}
@@ -627,12 +627,17 @@ void MaxQFilter::twopass(FilterBank *fb, int channel_num, float **filter_out) {
 	} // 1000 to 3925
 	
 	// Q/RESONANCE: c0 = 1 - 2/(decay * samplerate), where decay is around 0.01 to 4.0
-	if (fb->io->HICPUMODE) {
+	uint32_t qval_b_idx = (qval_b / 1.4f) + 200;
+	qval_b_idx = clamp(qval_b_idx, 200, 3125);
+
+	if (fb->io->HICPUMODE) { 
 		c0_a = 1.0f - exp_4096[(uint32_t)(qval_a / 1.4f) + 200] / 10.0f; //exp[200...3125]
-		c0   = 1.0f - exp_4096[(uint32_t)(qval_b / 1.4f) + 200] / 10.0f; //exp[200...3125]
+		c0   = 1.0f - exp_4096[qval_b_idx] / 10.0f; //exp[200...3125]
+		// c0_a = 1.0f - exp_4096[(uint32_t)(qval_a / 1.4f) + 200] / 10.0f; //exp[200...3125]
+		// c0   = 1.0f - exp_4096[(uint32_t)(qval_b / 1.4f) + 200] / 10.0f; //exp[200...3125]
 	} else {
 		c0_a = 1.0f - exp_4096[(uint32_t)(qval_a / 1.4f) + 200] / 5.0f; //exp[200...3125]
-		c0   = 1.0f - exp_4096[(uint32_t)(qval_b / 1.4f) + 200] / 5.0f; //exp[200...3125]
+		c0   = 1.0f - exp_4096[qval_b_idx] / 5.0f; //exp[200...3125]
 	}
 
 	// FREQ: c1 = 2 * pi * freq / samplerate
