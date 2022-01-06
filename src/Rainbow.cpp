@@ -1324,42 +1324,21 @@ struct RainbowWidget : ModuleWidget {
 	}
 
 	void appendContextMenu(Menu *menu) override {
-
 		Rainbow *rainbow = dynamic_cast<Rainbow*>(module);
 		assert(rainbow);
 
-		struct CPUItem : MenuItem {
-			Rainbow *module;
-			bool mode;
-			void onAction(const rack::event::Action &e) override {
-				module->setCPUMode(mode);
-			}
-		};
-
-		struct CPUMenu : MenuItem {
-			Rainbow *module;
-			Menu *createChildMenu() override {
-				Menu *menu = new Menu;
-				std::vector<bool> modes = {true, false};
-				std::vector<std::string> names = {"High CPU Mode (96Khz)", "Low CPU Mode (48KHz)"};
-
-				for (size_t i = 0; i < modes.size(); i++) {
-					CPUItem *item = createMenuItem<CPUItem>(names[i], CHECKMARK(module->highCPUMode == modes[i]));
-					item->module = module;
-					item->mode = modes[i];
-					menu->addChild(item);
-				}
-				return menu;
-			}
-		};
-
-		menu->addChild(construct<MenuLabel>());
-		CPUMenu *item = createMenuItem<CPUMenu>("CPU Mode");
-		item->module = rainbow;
-		menu->addChild(item);
-
-     }
-
+		menu->addChild(new MenuSeparator());
+		menu->addChild(createSubmenuItem("CPU Mode", "", [=](Menu* menu) {
+			menu->addChild(createCheckMenuItem("High (96Khz)", "",
+				[=]() {return rainbow->highCPUMode == true;},
+				[=]() {rainbow->setCPUMode(true);}
+			));
+			menu->addChild(createCheckMenuItem("Low (48KHz) (default)", "",
+				[=]() {return rainbow->highCPUMode == false;},
+				[=]() {rainbow->setCPUMode(false);}
+			));
+		}));
+    }
 };
 
 Model *modelRainbow = createModel<Rainbow, RainbowWidget>("Rainbow");
