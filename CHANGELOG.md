@@ -1,9 +1,11 @@
 # Prism change log
 2.3.4
-* Rainbow: Make filter select snap
+* Rainbow: Fix intermittent wayward output levels in audio processor (due to Audio module init bug)
+* Rainbow: Fix CPU mode menu
+* Rainbow: Fix filter Linux instantiation crash
 
 2.3.3
-* DarkMode LED fix - seems to also help with intermittent crashes on patch load
+* Dark mode LED fix - seems to also help with intermittent crashes on patch load
 
 2.3.1 - 2.3.2
 * Added hardware tags
