@@ -3,9 +3,11 @@
 * Rainbow: Fix intermittent wayward output levels in audio processor (due to Audio module init bug)
 * Rainbow: Fix CPU mode menu
 * Rainbow: Fix filter Linux instantiation crash
+* Rainbow & Spectrum: Initialize some variables for intermittent crash fixes
 
 2.3.3
 * Dark mode LED fix - seems to also help with intermittent crashes on patch load
+* Rainbow: Fix channel locks and channel Qs
 
 2.3.1 - 2.3.2
 * Added hardware tags
@@ -14,7 +16,7 @@
 2.3.0
 * Updated for Rack2 API
 * Rainbow: new panel and LED palette by Pyer
-* Rainbow Expander: updated panel
+* Spectrum: updated panel
 * Droplet: new panel by Pyer
 * Droplet: only process if there's an input
 
