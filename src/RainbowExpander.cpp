@@ -1,4 +1,3 @@
-
 #include <string>
 #include <sstream>
 #include <algorithm> 
@@ -128,12 +127,10 @@ struct ScalaFile {
 
 			d->isRatio = true;
 			return d;
-
 		}
 
 		lastError = "Unknown error";
 		return NULL;
-
 	}
 
 	bool load(const char *path) {
@@ -191,7 +188,6 @@ struct ScalaFile {
 				lastError = "Failed to parse line '" + tokens[0] + "'";
 				failed = true;
 			}
-
     	}
 
 		if (notes.size() != nNotes) {
@@ -217,7 +213,6 @@ struct ScalaFile {
 		}
 		notes.clear();
 	}
-
 };
 
 
@@ -269,7 +264,7 @@ struct RainbowScaleExpander : core::PrismModule {
 	std::string parameterLabels[NUM_PAGES][NUM_PARAMETERS] = {};
 	std::string parameterDescriptions[NUM_PAGES][NUM_PARAMETERS] = {};
 
-	prism::gui::PrismReadoutParam *widgetRef[NUM_PARAMETERS];
+	prism::gui::PrismReadoutParam *widgetRef[NUM_PARAMETERS] = {};
 
 	std::string path;
 
@@ -280,8 +275,8 @@ struct RainbowScaleExpander : core::PrismModule {
 	const float FtoC48 = (2.0f * core::PI) / 48000.0f;
 
 
-	float currFreqs[NUM_BANKNOTES];
-	int currState[NUM_BANKNOTES];
+	float currFreqs[NUM_BANKNOTES] = {};
+	int currState[NUM_BANKNOTES] = {};
 	int currScale = 0;
 	int currNote = 0;
 	int currBank = 0;
@@ -289,10 +284,10 @@ struct RainbowScaleExpander : core::PrismModule {
 	int currPage = 0; // Freq = 0, ET = 1, JI = 2
 	int prevPage = 0;
 
-	std::string name;
-	std::string description;
-	std::string scalename[11];
-	std::string notedesc[231];
+	std::string name = "";
+	std::string description = "";
+	std::string scalename[11] = {};
+	std::string notedesc[231] = {};
 
     ScaleSet scales;
 
@@ -406,9 +401,7 @@ struct RainbowScaleExpander : core::PrismModule {
 				}
 			}
 		}
-
 		populateWidgetData();
-
 	}
 
 	void initialise() {
@@ -571,7 +564,6 @@ struct RainbowScaleExpander : core::PrismModule {
 		for (int i = 0; i < NUM_PARAMETERS; i++) {
 			params[PARAMETER_PARAM + i].setValue(parameterValues[currPage][i]);
 		}
-
 	}
 
 	rack::dsp::SchmittTrigger transferTrigger;
@@ -579,7 +571,6 @@ struct RainbowScaleExpander : core::PrismModule {
 	rack::dsp::SchmittTrigger executeTrigger;
 
 	RainbowScaleExpander() : core::PrismModule(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-
 		configParam(TRANSFER_PARAM, 0, 1, 0, "Load scales into Rainbow");
 		configParam(SCALE_PARAM, 0, 10, 0, "Select scale from bank");
 		configParam(SLOT_PARAM, 0, 20, 0, "Select note in scale");
@@ -595,9 +586,7 @@ struct RainbowScaleExpander : core::PrismModule {
 		for (int i = 0; i < NUM_PARAMETERS; i++) {
 			configParam(PARAMETER_PARAM + i, -100000, 100000, 0, "Parameter");
 		}
-
 		initialise();
-
 	}
 
 	void onReset() override {
@@ -606,7 +595,7 @@ struct RainbowScaleExpander : core::PrismModule {
 
 	void populateWidgetData() {
 		for (int i = 0; i < NUM_PARAMETERS; i++) {
-			if (widgetRef[i]) {
+			if (widgetRef[i] && parameterActive[currPage][i]) {
 				widgetRef[i]->isActive 	= parameterActive[currPage][i];
 				widgetRef[i]->title 	= parameterLabels[currPage][i];
 			}
@@ -637,7 +626,6 @@ struct RainbowScaleExpander : core::PrismModule {
 			}
 			*root = rootA * finalm3;
 		}
-
 	}
 
 	void setFromFrequency() {
@@ -658,7 +646,6 @@ struct RainbowScaleExpander : core::PrismModule {
 		}
 
 		this->moveNote();
-
 	}
 
 	void setFromET() {
@@ -705,7 +692,6 @@ struct RainbowScaleExpander : core::PrismModule {
 		}
 
 		this->moveNote();
-
 	}
 
 	void setFromJI() {
@@ -785,7 +771,6 @@ struct RainbowScaleExpander : core::PrismModule {
 				break;
 			} 
 		}
-
 	}
 
 	void executeFromET() {
@@ -943,7 +928,6 @@ struct RainbowScaleExpander : core::PrismModule {
 				break;
 			} 
 		}
-
 	}
 
 	void applyScale() {
@@ -1016,7 +1000,6 @@ struct RainbowScaleExpander : core::PrismModule {
 		}
 
 		description = scala.description;
-
 	}
 
 	void process(const ProcessArgs &args) override {
@@ -1112,7 +1095,6 @@ struct RainbowScaleExpander : core::PrismModule {
 			params[SLOT_PARAM].setValue(++note);
 		}
 	}
-
 };
 
 struct FrequencyDisplay : TransparentWidget {
@@ -1329,9 +1311,7 @@ static void applyFile(RainbowScaleExpander *module) {
 }
 
 struct RainbowScaleExpanderWidget : ModuleWidget {
-	
 	RainbowScaleExpanderWidget(RainbowScaleExpander *module) {
-
 		setModule(module);
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/RainbowScaleExpander.svg")));
 
@@ -1391,7 +1371,6 @@ struct RainbowScaleExpanderWidget : ModuleWidget {
 			bankW->box.size = Vec(80.0, 20.0f);
 			bankW->module = module;
 			addChild(bankW);
-
 		}
 	}
 
@@ -1425,9 +1404,7 @@ struct RainbowScaleExpanderWidget : ModuleWidget {
 		applyItem->text = "Apply Scala file";
 		applyItem->module = spectrum;
 		menu->addChild(applyItem);
-
 	 }
-
 };
 
 Model *modelRainbowScaleExpander = createModel<RainbowScaleExpander, RainbowScaleExpanderWidget>("RainbowScaleExpander");

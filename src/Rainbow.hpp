@@ -210,10 +210,10 @@ struct TFilter {
 struct MaxQFilter : TFilter {
 
 	// filter buffer
-	float buf[NUM_SCALES][NUM_FILTS][3]; 
+	float buf[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
 
 	// buffer for first filter of two-pass
-	float buf_a[NUM_SCALES][NUM_FILTS][3]; 
+	float buf_a[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
 
    	// Filter parameters
 	float qval_b = 0.0f;	
@@ -231,7 +231,7 @@ struct MaxQFilter : TFilter {
 struct BpreFilter : TFilter {
 
 	// filter buffer
-	float buf[NUM_SCALES][NUM_FILTS][3]; 
+	float buf[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
 
    	// Filter parameters
 	float qval_b = 0.0f;	
@@ -246,10 +246,10 @@ struct BpreFilter : TFilter {
 struct Filter {
 
 	// filter buffer
-	float buf[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3]; 
+	float buf[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {{{{}}}}; 
 
 	// buffer for first filter of two-pass
-	float buf_a[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3]; 
+	float buf_a[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {{{{}}}}; 
 
    	// Filter parameters
 	float qval_b[NUM_CHANNELS]   = {0, 0, 0, 0, 0, 0};	
@@ -294,9 +294,9 @@ struct FilterBank {
 	ScaleSet scales;
 
 	//Filters
-	uint8_t note[NUM_CHANNELS];
-	uint8_t scale[NUM_CHANNELS];
-	uint8_t scale_bank[NUM_CHANNELS];
+	uint8_t note[NUM_CHANNELS] = {};
+	uint8_t scale[NUM_CHANNELS] = {};
+	uint8_t scale_bank[NUM_CHANNELS] = {};
 	uint8_t old_scale_bank[NUM_CHANNELS] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 	// filter coefficients
@@ -511,7 +511,7 @@ struct LPF {
 	AnalogPolarity		polarity;		//AP_UNIPOLAR or AP_BIPOLAR
 
 	//Filter window buffer and index
-	float	 			fir_lpf[MAX_FIR_LPF_SIZE];
+	float	 			fir_lpf[MAX_FIR_LPF_SIZE] = {};
 	uint32_t 			fir_lpf_i = 0;
 
 	void setup_fir_filter();
@@ -663,9 +663,9 @@ struct State {
 
 	bool initialised = false;
 
-	uint8_t note[NUM_CHANNELS];
-	uint8_t scale[NUM_CHANNELS];
-	uint8_t scale_bank[NUM_CHANNELS];
+	uint8_t note[NUM_CHANNELS] = {};
+	uint8_t scale[NUM_CHANNELS] = {};
+	uint8_t scale_bank[NUM_CHANNELS] = {};
 	float userscale96[NUM_BANKNOTES];
 	float userscale48[NUM_BANKNOTES];
 
