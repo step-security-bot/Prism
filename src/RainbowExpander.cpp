@@ -1269,7 +1269,7 @@ static void loadFile(RainbowScaleExpander *module) {
 	}
 
 #ifdef USING_CARDINAL_NOT_RACK
-	async_dialog_filebrowser(false, dir.c_str(), "Load Scala file", [module](char* path) {
+	async_dialog_filebrowser(false, nullptr, dir.c_str(), "Load Scala file", [module](char* path) {
 		filePathSelected(module, path);
 	});
 #else
