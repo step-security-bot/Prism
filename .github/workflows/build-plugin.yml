@@ -3,7 +3,7 @@ name: Build VCV Rack Plugin
 on: [push, pull_request]
 
 env:
-  rack-sdk-version: 2.1.0
+  rack-sdk-version: 2.1.2
 
 defaults:
   run:
