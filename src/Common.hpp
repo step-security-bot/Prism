@@ -270,7 +270,12 @@ struct FloatReadout : PrismReadoutParam {
 			char text[128];
 
 			nvgFontSize(ctx.vg, 14.0f);
-			nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
+			#ifdef USING_CARDINAL_NOT_RACK
+			if (!settings::darkMode)
+				nvgFillColor(ctx.vg, nvgRGBA(0x41, 0x41, 0x41, 0xFF));
+			else
+			#endif
+				nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
 			snprintf(text, sizeof(text), "%s", title.c_str());
 			nvgText(ctx.vg, pos.x, pos.y, text, NULL);
 
@@ -307,8 +312,12 @@ struct IntegerReadout : PrismReadoutParam {
 			nvgFontFaceId(ctx.vg, font->handle);
 
 			char text[128];
-
-			nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
+			#ifdef USING_CARDINAL_NOT_RACK
+			if (!settings::darkMode)
+				nvgFillColor(ctx.vg, nvgRGBA(0x41, 0x41, 0x41, 0xFF));
+			else
+			#endif
+				nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
 			snprintf(text, sizeof(text), "%s", title.c_str());
 			nvgText(ctx.vg, pos.x, pos.y, text, NULL);
 
