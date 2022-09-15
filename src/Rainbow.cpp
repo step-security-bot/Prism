@@ -1,7 +1,5 @@
 #include <bitset>
 
-#include "common.hpp"
-
 #include "plugin.hpp"
 #include "Common.hpp"
 #include "Rainbow.hpp"
