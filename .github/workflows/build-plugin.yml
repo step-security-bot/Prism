@@ -3,7 +3,7 @@ name: Build VCV Rack Plugin
 on:
   push:
     branches:
-      - main
+      - Rack2
       - 'releases/**'
     tags:
       - 'v**'
