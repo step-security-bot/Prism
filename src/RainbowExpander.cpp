@@ -92,6 +92,7 @@ struct ScalaFile {
 				d->lower = std::stoi(ratios[1]);
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to integer";
+				delete d;
 				return NULL;
 			}
 
@@ -105,6 +106,7 @@ struct ScalaFile {
 				d->cents = std::stof(text);
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to float";
+				delete d;
 				return NULL;
 			}
 
@@ -120,6 +122,7 @@ struct ScalaFile {
 				d->lower = 1;
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to integer";
+				delete d;
 				return NULL;
 			}
 
@@ -179,8 +182,8 @@ struct ScalaFile {
 			split<std::vector<std::string>>(line,tokens);
 
 			ScalaDef *n = parseNote(tokens[0]);
-			n->description = line;
 			if (n != NULL) {
+				n->description = line;
 				notes.push_back(n);
 			} else {
 				lastError = "Failed to parse line '" + tokens[0] + "'";
