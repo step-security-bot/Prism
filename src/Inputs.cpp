@@ -42,7 +42,6 @@ void Inputs::configure(IO *_io, Rotation *_rotation, Envelope *_envelope, Filter
 }
 
 void Inputs::param_read_switches(void) {
-	uint32_t lag_val;
 
 	/*** Read Switches ***/
 	envelope->env_prepost_mode = io->PREPOST_SWITCH;
@@ -101,7 +100,7 @@ void Inputs::param_read_switches(void) {
 	}
 
 	if (io->SLEW_ADC > 0) {
-		lag_val = (io->SLEW_ADC / 2) + 137;
+		uint32_t lag_val = (io->SLEW_ADC / 2) + 137;
 		if (lag_val > 4095) {
 			lag_val = 4095;
 		}
