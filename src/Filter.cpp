@@ -224,7 +224,6 @@ void Filter::filter_onepass(FilterBank *fb, float **filter_out) {
 	uint8_t filter_num;
 	uint8_t channel_num;
 	uint8_t scale_num;
-	uint8_t nudge_filter_num;
 
 	float c0, c1, c2;
 	float tmp;
@@ -253,12 +252,7 @@ void Filter::filter_onepass(FilterBank *fb, float **filter_out) {
 				filter_num = fb->rotation->motion_fadeto_note[channel_num];
 				scale_num  = fb->rotation->motion_fadeto_scale[channel_num];
 			}
-
-			nudge_filter_num = filter_num + 1;
-			if (nudge_filter_num > NUM_FILTS) {
-				nudge_filter_num = NUM_FILTS;
-			}
-
+		
 			// Q/RESONANCE: c0 = 1 - 2/(decay * samplerate), where decay is around 0.01 to 4.0
 			if (fb->io->HICPUMODE) {
 				c0 = 1.0f - exp_4096[(uint32_t)(fb->q->qval[channel_num] / 1.4f) + 200] / 10.0; //exp[200...3125]
