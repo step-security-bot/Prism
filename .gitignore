@@ -5,3 +5,6 @@ dep
 .idea
 dist
 *.bat
+fullhtml
+*Sourcetrail.*
+*cppcheck*
