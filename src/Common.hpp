@@ -165,7 +165,6 @@ struct PrismReadoutParam : app::ParamWidget {
 
 	bool isActive = true;
 	std::string title;
-	std::string value;
 
 	PrismReadoutParam() {
 		fb = new widget::FramebufferWidget;
@@ -241,7 +240,7 @@ struct PrismReadoutParam : app::ParamWidget {
 			}
 
 			// snprintf(text, sizeof(text), "%.3f", paramQuantity->getValue());
-			value = string::f("%.3f", paramQuantity->getValue());
+			std::string value = string::f("%.3f", paramQuantity->getValue());
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
 	}
@@ -263,8 +262,6 @@ struct FloatReadout : PrismReadoutParam {
 
 			nvgFontFaceId(ctx.vg, font->handle);
 
-			// char value[128];
-
 			#ifdef USING_CARDINAL_NOT_RACK
 			if (!settings::darkMode)
 				nvgFillColor(ctx.vg, nvgRGBA(0x41, 0x41, 0x41, 0xFF));
@@ -285,7 +282,7 @@ struct FloatReadout : PrismReadoutParam {
 			nvgFontSize(ctx.vg, 17.0f);
 			// snprintf(value, sizeof(value), "%.3f", paramQuantity->getValue());
 			// nvgText(ctx.vg, pos.x, pos.y + 19.5, value, NULL);
-			value = string::f("%.3f", paramQuantity->getValue());
+			std::string value = string::f("%.3f", paramQuantity->getValue());
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
 	}
@@ -325,7 +322,7 @@ struct IntegerReadout : PrismReadoutParam {
 			}
 
 			// snprintf(text, sizeof(text), "%d", (int)paramQuantity->getValue());
-			value = string::f("%d", static_cast<int>(paramQuantity->getValue()));
+			std::string value = string::f("%d", static_cast<int>(paramQuantity->getValue()));
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
 	}	
