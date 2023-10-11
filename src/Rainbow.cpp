@@ -12,14 +12,12 @@ using namespace rainbow;
 struct Rainbow;
 
 struct LED : LightWidget {
-
 	NVGcolor color;
 	NVGcolor colorBorder;
 
-	Rainbow *module = NULL;
+	Rainbow *module {};
 
 	int id;
-
 	float ledRadius = 5.0f;
 	float ledStrokeWidth = 1.0f;
 	float xCenter;
@@ -607,8 +605,8 @@ void Rainbow::process(const ProcessArgs &args) {
 		io.SCALEDOWN_BUTTON = false;
 	}
 
-	io.MOD135_SWITCH 		= (Mod135Setting)params[MOD135_PARAM].getValue();
-	io.MOD246_SWITCH 		= (Mod246Setting)params[MOD246_PARAM].getValue();
+	io.MOD135_SWITCH = (Mod135Setting)params[MOD135_PARAM].getValue();
+	io.MOD246_SWITCH = (Mod246Setting)params[MOD246_PARAM].getValue();
 
 	if (lock135Trigger.process(inputs[LOCK135_INPUT].getVoltage()) ||
 		lock135ButtonTrigger.process(params[LOCK135_PARAM].getValue())) {
@@ -675,21 +673,20 @@ void Rainbow::process(const ProcessArgs &args) {
 		io.CHANGED_BANK = false;
 	}
 
-	io.FILTER_SWITCH		= (FilterSetting)params[FILTER_PARAM].getValue();
+	io.FILTER_SWITCH	= (FilterSetting)params[FILTER_PARAM].getValue();
 
-	int noiseSelected 		= params[NOISE_PARAM].getValue();
+	int noiseSelected 	= params[NOISE_PARAM].getValue();
 
-	io.MORPH_ADC			= (uint16_t)clamp(params[MORPH_PARAM].getValue() + inputs[MORPH_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
-	io.SPREAD_ADC			= (uint16_t)clamp(params[SPREAD_PARAM].getValue() + inputs[SPREAD_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
+	io.MORPH_ADC		= (uint16_t)clamp(params[MORPH_PARAM].getValue() + inputs[MORPH_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
+	io.SPREAD_ADC		= (uint16_t)clamp(params[SPREAD_PARAM].getValue() + inputs[SPREAD_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
 
-	io.GLOBAL_Q_LEVEL		= (int16_t)clamp(inputs[GLOBAL_Q_INPUT].getVoltage() * 409.5f, -4095.0f, 4095.0f);
-	io.GLOBAL_Q_CONTROL		= (int16_t)params[GLOBAL_Q_PARAM].getValue();
+	io.GLOBAL_Q_LEVEL	= (int16_t)clamp(inputs[GLOBAL_Q_INPUT].getVoltage() * 409.5f, -4095.0f, 4095.0f);
+	io.GLOBAL_Q_CONTROL	= (int16_t)params[GLOBAL_Q_PARAM].getValue();
 
-	io.GLOBAL_LEVEL_ADC 	= params[GLOBAL_LEVEL_PARAM].getValue() / 4095.0f;
-	io.GLOBAL_LEVEL_CV		= inputs[GLOBAL_LEVEL_INPUT].getVoltage() / 5.0f;
+	io.GLOBAL_LEVEL_ADC = params[GLOBAL_LEVEL_PARAM].getValue() / 4095.0f;
+	io.GLOBAL_LEVEL_CV	= inputs[GLOBAL_LEVEL_INPUT].getVoltage() / 5.0f;
 
 	for (int n = 0; n < 6; n++) {
-
 		if (!inputs[MONO_LEVEL_INPUT + n].isConnected() && !inputs[POLY_LEVEL_INPUT].isConnected()) { 
 			io.LEVEL_CV[n] = 1.0f;
 		 } else {
@@ -697,18 +694,16 @@ void Rainbow::process(const ProcessArgs &args) {
 		 }
 
 		io.LEVEL_ADC[n] 		= clamp(params[CHANNEL_LEVEL_PARAM + n].getValue() / 4095.0f, 0.0f, 1.0f);
-
-		io.CHANNEL_Q_LEVEL[n] 	= (int16_t)clamp((inputs[MONO_Q_INPUT + n].getVoltage() + inputs[POLY_Q_INPUT].getVoltage(n))  * 409.5f, -4095.0f, 4095.0f);
+		io.CHANNEL_Q_LEVEL[n] 	= (int16_t)clamp((inputs[MONO_Q_INPUT + n].getVoltage() + inputs[POLY_Q_INPUT].getVoltage(n)) * 409.5f, -4095.0f, 4095.0f);
 		io.CHANNEL_Q_CONTROL[n]	= (int16_t)params[CHANNEL_Q_PARAM + n].getValue();
-
 		io.TRANS_DIAL[n]		= params[TRANS_PARAM + n].getValue();
 	}
 
-	io.FREQNUDGE1_ADC		= (int16_t)params[FREQNUDGE1_PARAM].getValue();
-	io.FREQNUDGE6_ADC		= (int16_t)params[FREQNUDGE6_PARAM].getValue();
-	io.SCALE_ADC			= (uint16_t)clamp(inputs[SCALE_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
+	io.FREQNUDGE1_ADC = (int16_t)params[FREQNUDGE1_PARAM].getValue();
+	io.FREQNUDGE6_ADC = (int16_t)params[FREQNUDGE6_PARAM].getValue();
 
-	io.ROTCV_ADC			= (uint16_t)clamp(inputs[ROTATECV_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
+	io.SCALE_ADC = (uint16_t)clamp(inputs[SCALE_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
+	io.ROTCV_ADC = (uint16_t)clamp(inputs[ROTATECV_INPUT].getVoltage() * 409.5f, 0.0f, 4095.0f);
 
 	io.FREQCV1_CHAN		= inputs[FREQCV1_INPUT].getChannels();
 	io.FREQCV6_CHAN		= inputs[FREQCV6_INPUT].getChannels();
@@ -717,8 +712,8 @@ void Rainbow::process(const ProcessArgs &args) {
 		io.FREQCV6_CV[i] = clamp(inputs[FREQCV6_INPUT].getVoltage(i) * 0.5f, -5.0f, 5.0f); 
 	}
 
-	io.SLEW_ADC		= (uint16_t)params[SLEW_PARAM].getValue();
-	io.ENV_SWITCH	= (EnvelopeMode)params[ENV_PARAM].getValue();
+	io.SLEW_ADC	= (uint16_t)params[SLEW_PARAM].getValue();
+	io.ENV_SWITCH = (EnvelopeMode)params[ENV_PARAM].getValue();
 
 	if (glissTrigger.process(params[VOCTGLIDE_PARAM].getValue())) {
 		io.GLIDE_SWITCH = !io.GLIDE_SWITCH;
@@ -886,28 +881,20 @@ void Rainbow::process(const ProcessArgs &args) {
 }
 
 void Rainbow::initialise(void) {
-
 	set_default_param_values();
 	
 	filterbank.set_default_user_scalebank();
-
 	rotation.spread = (io.SPREAD_ADC >> 8) + 1;
 	rotation.update_spread(1);
-
 	tuning.initialise();
 	envelope.initialise();
 } 
 
 void Rainbow::prepare(void) {
-
 	input.param_read_switches();
-
 	tuning.update();
-
 	ring.update_led_ring();
-	
 	rotation.update_motion();
-
 	envelope.update();
 
 	int32_t t_spread = input.read_spread();
@@ -916,41 +903,32 @@ void Rainbow::prepare(void) {
 	}
 
 	filterbank.process_bank_change();
-
 	filterbank.process_user_scale_change();
 
 	if (io.ROTUP_TRIGGER || io.ROTUP_BUTTON) {
 		rotation.rotate_up();
 	}
-
 	if (io.ROTDOWN_TRIGGER || io.ROTDOWN_BUTTON) {
 		rotation.rotate_down();
 	}
-
 	if (io.SCALEUP_BUTTON) {
 		rotation.change_scale_up();
 	}
-
 	if (io.SCALEDOWN_BUTTON) {
 		rotation.change_scale_down();
 	}
 
 	input.process_rotateCV();
 	input.process_scaleCV();
-
 	levels.update();
-
 	populate_state();
-
 }
 
 void Rainbow::set_default_param_values(void) {
-	
-	//Set default parameter values
 	for (uint8_t i = 0; i < NUM_CHANNELS; i++) {
 		filterbank.note[i]  				= i + 8;
 		filterbank.scale[i] 				= 0;
-		rotation.motion_fadeto_scale[i]	= filterbank.scale[i];
+		rotation.motion_fadeto_scale[i]		= filterbank.scale[i];
 		rotation.motion_scale_dest[i]		= filterbank.scale[i];
 		filterbank.scale_bank[i] 			= 0;
 		rotation.motion_spread_dir[i]		= 0;
@@ -969,13 +947,10 @@ void Rainbow::set_default_param_values(void) {
 	filterbank.filter_mode = TWOPASS;
 
 	state.initialised = true;
-
 }
 
 void Rainbow::load_from_state(void) {
-
 	if(state.initialised) {
-
 		//Set default parameter values
 		for (uint8_t i = 0; i < NUM_CHANNELS; i++) {
 			filterbank.note[i]					= state.note[i];
@@ -1001,13 +976,10 @@ void Rainbow::load_from_state(void) {
 		rotation.motion_rotate		= 0;
 
 		state.initialised = true;
-
 	}
-
 }
 
 void Rainbow::populate_state(void) {
-
 	if(state.initialised) {
 		for (uint8_t i = 0; i < NUM_CHANNELS; i++) {
 			state.note[i]		= filterbank.note[i];
@@ -1020,7 +992,6 @@ void Rainbow::populate_state(void) {
 		state.userscale96[i] = filterbank.userscale_bank96[i]; 
 		state.userscale48[i] = filterbank.userscale_bank48[i]; 
 	}
-
 }
 
 
@@ -1034,9 +1005,8 @@ void LED::onButton(const event::Button &e) {
 }
 
 struct BankWidget : Widget {
-
 	std::string fontPath;
-	Rainbow *module = NULL;
+	Rainbow *module {};
 	ScaleSet scales;
 	NVGcolor colors[NUM_SCALEBANKS] = {
 
@@ -1076,8 +1046,7 @@ struct BankWidget : Widget {
 	}
 
 	void drawLayer(const DrawArgs& ctx, int layer) override {
-		if (layer != 1) return;
-		if (module == NULL) return;
+		if (layer != 1 || !module) return;
 		
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font) {
@@ -1098,13 +1067,10 @@ struct BankWidget : Widget {
 		}
 		Widget::drawLayer(ctx, layer);
 	}
-
 };
 
 struct RainbowWidget : ModuleWidget {
-	
 	RainbowWidget(Rainbow *module) {
-
 		setModule(module);
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/prism_Rainbow.svg")));
 
@@ -1249,7 +1215,6 @@ struct RainbowWidget : ModuleWidget {
 		addChild(createLightCentered<SmallLight<RedLight>>(Vec(5.500f, 5.500f), module, Rainbow::CPUMODE_LIGHT));
 
 		if(module) {
-
 			BankWidget *bankW = new BankWidget();
 			bankW->module = module;
 			bankW->box.pos = Vec(474.962f, 380.0 - 320.162 - 17.708);
@@ -1290,7 +1255,6 @@ struct RainbowWidget : ModuleWidget {
 				module->tuningLEDs[i]->module = NULL;
 				addChild(module->tuningLEDs[i]);
 			}
-
 		}
 
 		if (module) {

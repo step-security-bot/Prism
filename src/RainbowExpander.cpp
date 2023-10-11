@@ -77,12 +77,11 @@ struct ScalaFile {
 	ScalaDef *parseNote(std::string text) {
 
 		if (text.find('/') != std::string::npos) {
-
 			std::vector<std::string> ratios;
 			split<std::vector<std::string>>(text,ratios,'/');
 			if (ratios.size() != 2) {
 				lastError = "Invalid ratio " + text;
-				return NULL;
+				return nullptr;
 			}
 
 			ScalaDef *d = new ScalaDef();
@@ -93,7 +92,7 @@ struct ScalaFile {
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to integer";
 				delete d;
-				return NULL;
+				return nullptr;
 			}
 
 			d->isRatio = true;
@@ -107,7 +106,7 @@ struct ScalaFile {
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to float";
 				delete d;
-				return NULL;
+				return nullptr;
 			}
 
 			d->isRatio = false;
@@ -123,7 +122,7 @@ struct ScalaFile {
 			} catch (std::exception &e) {
 				lastError = "Cannot convert " + text + " to integer";
 				delete d;
-				return NULL;
+				return nullptr;
 			}
 
 			d->isRatio = true;
@@ -131,11 +130,10 @@ struct ScalaFile {
 		}
 
 		lastError = "Unknown error";
-		return NULL;
+		return nullptr;
 	}
 
 	bool load(const char *path) {
-
 		bool readNumNotes = false;
 		bool readDescription = false;
 		
@@ -156,7 +154,6 @@ struct ScalaFile {
 		bool failed = false;
 
 		while (std::getline(file,line)) {
-
 			trim(line);
 
 			if (line[0] == '!') {
@@ -265,7 +262,7 @@ struct RainbowScaleExpander : core::PrismModule {
 	std::string parameterLabels[NUM_PAGES][NUM_PARAMETERS] = {};
 	std::string parameterDescriptions[NUM_PAGES][NUM_PARAMETERS] = {};
 
-	prism::gui::PrismReadoutParam *widgetRef[NUM_PARAMETERS] = {};
+	gui::PrismReadoutParam *widgetRef[NUM_PARAMETERS] = {};
 
 	std::string path;
 
@@ -285,8 +282,8 @@ struct RainbowScaleExpander : core::PrismModule {
 	int currPage = 0; // Freq = 0, ET = 1, JI = 2
 	int prevPage = 0;
 
-	std::string name = "";
-	std::string description = "";
+	std::string name;
+	std::string description;
 	std::string scalename[11] = {};
 	std::string notedesc[231] = {};
 
@@ -295,7 +292,6 @@ struct RainbowScaleExpander : core::PrismModule {
 	ScalaFile scala;
 
 	json_t *dataToJson() override {
-
         json_t *rootJ = json_object();
 
 		// page
@@ -342,7 +338,6 @@ struct RainbowScaleExpander : core::PrismModule {
     }
 
 	void dataFromJson(json_t *rootJ) override {
-
 		// ppage
 		json_t *ppageJ = json_object_get(rootJ, "ppage");
 		if (ppageJ)
@@ -461,16 +456,16 @@ struct RainbowScaleExpander : core::PrismModule {
 		parameterLabels[0][8] =	"";
 		parameterLabels[0][9] =	"Max steps";
 
-		parameterDescriptions[0][0] =	"Frequency";
-		parameterDescriptions[0][1] = 	"";
-		parameterDescriptions[0][2] =	"";
-		parameterDescriptions[0][3] =	"";
-		parameterDescriptions[0][4] =	"Number of slots to jump after each calculation step";
-		parameterDescriptions[0][5] =	"";
-		parameterDescriptions[0][6] = 	"Cents to be added to frequency";
-		parameterDescriptions[0][7] =	"";
-		parameterDescriptions[0][8] =	"";
-		parameterDescriptions[0][9] =	"Maximum number of steps to apply";
+		parameterDescriptions[0][0] = "Frequency";
+		parameterDescriptions[0][1] = "";
+		parameterDescriptions[0][2] = "";
+		parameterDescriptions[0][3] = "";
+		parameterDescriptions[0][4] = "Number of slots to jump after each calculation step";
+		parameterDescriptions[0][5] = "";
+		parameterDescriptions[0][6] = "Cents to be added to frequency";
+		parameterDescriptions[0][7] = "";
+		parameterDescriptions[0][8] = "";
+		parameterDescriptions[0][9] = "Maximum number of steps to apply";
 
 		// ET page
 		parameterValues[1][0] = 440.0f;		// Root A	
@@ -506,16 +501,16 @@ struct RainbowScaleExpander : core::PrismModule {
 		parameterLabels[1][8] =	"";
 		parameterLabels[1][9] =	"Max steps";
 
-		parameterDescriptions[1][0] =	"Frequency of pitch standard A4";
-		parameterDescriptions[1][1] =	"Octave";
-		parameterDescriptions[1][2] =	"Interval to add";
-		parameterDescriptions[1][3] =	"";
-		parameterDescriptions[1][4] =	"Number of slots to jump after each calculation step";
-		parameterDescriptions[1][5] =	"Equal Division of Octave, how many intervals are in 1 octave";
-		parameterDescriptions[1][6] =	"Cents to be added to the final interval";
-		parameterDescriptions[1][7] =	"Initial offset interval from octave";
-		parameterDescriptions[1][8] =	"";
-		parameterDescriptions[1][9] =	"Maximum number of steps to apply";
+		parameterDescriptions[1][0] = "Frequency of pitch standard A4";
+		parameterDescriptions[1][1] = "Octave";
+		parameterDescriptions[1][2] = "Interval to add";
+		parameterDescriptions[1][3] = "";
+		parameterDescriptions[1][4] = "Number of slots to jump after each calculation step";
+		parameterDescriptions[1][5] = "Equal Division of Octave, how many intervals are in 1 octave";
+		parameterDescriptions[1][6] = "Cents to be added to the final interval";
+		parameterDescriptions[1][7] = "Initial offset interval from octave";
+		parameterDescriptions[1][8] = "";
+		parameterDescriptions[1][9] = "Maximum number of steps to apply";
 
 		// JI page
 		parameterValues[2][0] = 16.5f;		// f0
@@ -551,16 +546,16 @@ struct RainbowScaleExpander : core::PrismModule {
 		parameterLabels[2][8] =	"Lower offset";
 		parameterLabels[2][9] =	"Max steps";
 
-		parameterDescriptions[2][0] =	"Fundamental frequency; JI octaves are calculated w.r.t. this frequency";
-		parameterDescriptions[2][1] =	"Octave";
-		parameterDescriptions[2][2] =	"Denominator of the interval ratio";
-		parameterDescriptions[2][3] =	"Numerator of the interval ratio";
-		parameterDescriptions[2][4] =	"Number of slots to jump after each calculation step";
-		parameterDescriptions[2][5] =	"";
-		parameterDescriptions[2][6] =	"Cents to be added to the final interval";
-		parameterDescriptions[2][7] =	"Denominator of initial offet interval";
-		parameterDescriptions[2][8] =	"Numerator of initial offet interval";
-		parameterDescriptions[2][9] =	"Maximum number of steps to apply";
+		parameterDescriptions[2][0] = "Fundamental frequency; JI octaves are calculated w.r.t. this frequency";
+		parameterDescriptions[2][1] = "Octave";
+		parameterDescriptions[2][2] = "Denominator of the interval ratio";
+		parameterDescriptions[2][3] = "Numerator of the interval ratio";
+		parameterDescriptions[2][4] = "Number of slots to jump after each calculation step";
+		parameterDescriptions[2][5] = "";
+		parameterDescriptions[2][6] = "Cents to be added to the final interval";
+		parameterDescriptions[2][7] = "Denominator of initial offet interval";
+		parameterDescriptions[2][8] = "Numerator of initial offet interval";
+		parameterDescriptions[2][9] = "Maximum number of steps to apply";
 
 		for (int i = 0; i < NUM_PARAMETERS; i++) {
 			params[PARAMETER_PARAM + i].setValue(parameterValues[currPage][i]);
@@ -606,7 +601,6 @@ struct RainbowScaleExpander : core::PrismModule {
 	}
 
 	void calculateRoot(float A440, float edo, float *root, float *distance) {
-
 		if (A440 == 440.0f && edo == 12) {
 			*root = 16.3516f;
 		} else {
@@ -630,7 +624,6 @@ struct RainbowScaleExpander : core::PrismModule {
 	}
 
 	void setFromFrequency() {
-
 		float freq 	= params[PARAMETER_PARAM + 0].getValue();
 		float cents	= params[PARAMETER_PARAM + 6].getValue();
 
@@ -810,11 +803,9 @@ struct RainbowScaleExpander : core::PrismModule {
 		}
 	
 		int intv = stackMode ? 0 : interval;
-
 		float dCents = pow(2.0f, cents / 1200.0f);
 
 		for (int i = 0; i < maxSteps; i++) {
-
 			float freq = fabs(root * pow(2, oct) * pow(2.0, (float)(intv + offset) / (float)edo) * dCents);
 
 			if (freq > maxFreq) {
@@ -932,9 +923,7 @@ struct RainbowScaleExpander : core::PrismModule {
 	}
 
 	void applyScale() {
-
 		float f0;
-
 		float f			= params[PARAMETER_PARAM + 0].getValue();
 		float A440		= params[PARAMETER_PARAM + 0].getValue();
 		int oct 		= params[PARAMETER_PARAM + 1].getValue();
@@ -997,9 +986,7 @@ struct RainbowScaleExpander : core::PrismModule {
 				f0 *= delta;
 				scalaPos = 0;
 			} 
-
 		}
-
 		description = scala.description;
 	}
 
@@ -1026,7 +1013,6 @@ struct RainbowScaleExpander : core::PrismModule {
 			for (int i = 0; i < NUM_SCALES; i++) {
 				scalename[i] = scales.full[bank]->scalename[i];
 			}
-
 		}
 
 		currPage = params[PAGE_PARAM].getValue();
@@ -1099,8 +1085,7 @@ struct RainbowScaleExpander : core::PrismModule {
 };
 
 struct FrequencyDisplay : TransparentWidget {
-	
-	RainbowScaleExpander *module;
+	RainbowScaleExpander *module {};
 	std::string fontPath;
 	
 	FrequencyDisplay() {
@@ -1109,9 +1094,7 @@ struct FrequencyDisplay : TransparentWidget {
 
 	// void draw(const DrawArgs &ctx) override {
 	void drawLayer(const DrawArgs& ctx, int layer) override {
-		if (layer != 1) return;
-		if (module == NULL) return;		
-		if (!module->stepX % 60 != 0) return;
+		if (layer != 1 || !module || (!module->stepX % 60 != 0)) return;
 
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font && font->handle >= 0) {		
@@ -1184,7 +1167,6 @@ struct FrequencyDisplay : TransparentWidget {
 };
 
 struct ExpanderBankWidget : Widget {
-
 	std::string fontPath;
 
 	ExpanderBankWidget() {
@@ -1192,8 +1174,7 @@ struct ExpanderBankWidget : Widget {
 	}
 
     ScaleSet scales;
-
-	RainbowScaleExpander *module = NULL;
+	RainbowScaleExpander *module {};
 
 	NVGcolor colors[NUM_SCALEBANKS] = {
 
@@ -1257,7 +1238,6 @@ struct ExpanderBankWidget : Widget {
 static void filePathSelected(RainbowScaleExpander *module, char* path);
 
 static void loadFile(RainbowScaleExpander *module) {
-
 	std::string dir;
 	std::string filename;
 	if (module->path != "") {
@@ -1297,7 +1277,6 @@ static void filePathSelected(RainbowScaleExpander *module, char* path) {
 }
 
 static void applyFile(RainbowScaleExpander *module) {
-
 	if (module->scala.isValid) {
 		module->applyScale();
 	} else {
@@ -1308,7 +1287,6 @@ static void applyFile(RainbowScaleExpander *module) {
 		osdialog_message(OSDIALOG_WARNING, OSDIALOG_OK, message.c_str());
 #endif
 	}
-
 }
 
 struct RainbowScaleExpanderWidget : ModuleWidget {
@@ -1362,7 +1340,7 @@ struct RainbowScaleExpanderWidget : ModuleWidget {
 		addParam(createParamCentered<gui::PrismLargeKnobSnap>(mm2px(Vec(98.328, 109.118)), module, RainbowScaleExpander::BANK_PARAM));
 		addParam(createParamCentered<gui::PrismButton>(mm2px(Vec(107.59, 109.118)), module, RainbowScaleExpander::BANKLOAD_PARAM));
 
-		if (module != NULL) {
+		if (module) {
 			FrequencyDisplay *displayW = createWidget<FrequencyDisplay>(ink2vcv(19.5f, 123.0f));
 			displayW->box.size = mm2px(Vec(0.0f, 120.0f));
 			displayW->module = module;
@@ -1376,7 +1354,6 @@ struct RainbowScaleExpanderWidget : ModuleWidget {
 	}
 
 	void appendContextMenu(Menu *menu) override {
-
 		RainbowScaleExpander *spectrum = dynamic_cast<RainbowScaleExpander*>(module);
 		assert(spectrum);
 

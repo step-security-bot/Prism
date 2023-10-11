@@ -6,25 +6,20 @@
 #include "plugin.hpp"
 #include "componentlibrary.hpp"
 
-namespace prism {
-
-namespace core {
+namespace prism::core {
+// namespace core {
 
 const double PI = 3.14159265358979323846264338327950288;
 
 struct PrismModule : rack::Module {
-
 	PrismModule(int numParams, int numInputs, int numOutputs, int numLights = 0) {
 		config(numParams, numInputs, numOutputs, numLights);
 	}
 
 	int stepX = 0;
-	
 	bool debugFlag = false;
 	
-	inline bool debugEnabled() {
-		return debugFlag;
-	}
+	inline bool debugEnabled() { return debugFlag; }
 
 	inline bool debugEnabled(int poll) {
 		if (debugFlag && stepX % poll == 0) {
@@ -34,15 +29,12 @@ struct PrismModule : rack::Module {
 		}
 	}
 
-	void step() override {
-		stepX++;
-	}
-	
+	void step() override { stepX++; }
 };
 
 } // namespace core
 
-namespace gui {
+namespace prism::gui {
 
 // Not going to monitor buttons
 struct PrismButton : SvgSwitch {
@@ -161,7 +153,6 @@ struct PrismPort : app::SvgPort {
 
 
 struct PrismReadoutParam : app::ParamWidget {
-
 	widget::FramebufferWidget *fb;
 	widget::SvgWidget *sw;
 	std::shared_ptr<Font> font;
@@ -172,7 +163,6 @@ struct PrismReadoutParam : app::ParamWidget {
 	PrismReadoutParam() {
 		fb = new widget::FramebufferWidget;
 		addChild(fb);
-
 		sw = new widget::SvgWidget;
 		fb->addChild(sw);
 	}
@@ -247,11 +237,9 @@ struct PrismReadoutParam : app::ParamWidget {
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
 		}
 	}
-
 };
 
 struct FloatReadout : PrismReadoutParam {
-
 	FloatReadout() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/ComponentLibrary/PrismFloatReadout.svg")));
 	}
@@ -290,11 +278,9 @@ struct FloatReadout : PrismReadoutParam {
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
 		}
 	}
-
 };
 
 struct IntegerReadout : PrismReadoutParam {
-
 	IntegerReadout() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/ComponentLibrary/PrismIntegerReadout.svg")));
 	}
@@ -331,13 +317,10 @@ struct IntegerReadout : PrismReadoutParam {
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
 		}
 	}
-	
 };
 
-
 } // namespace gui
-
-} // namespace ah
+// } // namespace prism
 
 inline math::Vec ink2vcv(float x, float y) {
 	return Vec(x * 1.5f, (128.5f - y) * 1.5f);
