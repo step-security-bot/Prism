@@ -7,7 +7,6 @@
 #include "componentlibrary.hpp"
 
 namespace prism::core {
-// namespace core {
 
 const double PI = 3.14159265358979323846264338327950288;
 
@@ -158,7 +157,7 @@ struct PrismReadoutParam : app::ParamWidget {
 	std::shared_ptr<Font> font;
 
 	bool isActive = true;
-	std::string title = "";
+	std::string title;
 
 	PrismReadoutParam() {
 		fb = new widget::FramebufferWidget;
@@ -274,12 +273,12 @@ struct FloatReadout : PrismReadoutParam {
 			}
 
 			nvgFontSize(ctx.vg, 17.0f);
-			snprintf(text, sizeof(text), "%.3f", paramQuantity->getValue());
+			snprintf(text, sizeof(text), "%.2f", paramQuantity->getValue());
 			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
 		}
 	}
 };
-
+/*** UNUSED ***
 struct IntegerReadout : PrismReadoutParam {
 	IntegerReadout() {
 		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/ComponentLibrary/PrismIntegerReadout.svg")));
@@ -318,9 +317,10 @@ struct IntegerReadout : PrismReadoutParam {
 		}
 	}
 };
+*/
 
 } // namespace gui
-// } // namespace prism
+// namespace prism
 
 inline math::Vec ink2vcv(float x, float y) {
 	return Vec(x * 1.5f, (128.5f - y) * 1.5f);

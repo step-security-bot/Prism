@@ -30,14 +30,13 @@ enum EnvelopeMode {
 	Trigger
 };
 
-uint32_t diff(uint32_t a, uint32_t b);
+// uint32_t diff(uint32_t a, uint32_t b);
 
 struct Audio;
 struct Filter;
 struct IO;
 
 struct Audio {
-
 	const float MIN_12BIT = -16777216.0f;
 	const float MAX_12BIT = 16777215.0f;
 
@@ -59,12 +58,10 @@ struct Audio {
 	dsp::DoubleRingBuffer<dsp::Frame<1>, 256> outputBuffer;
 
 	void ChannelProcess(droplet::IO &io, rack::engine::Input &input, rack::engine::Output &output, droplet::Filter &filter);
-
 };
 
 struct Filter {
-
-	IO *			io;
+	IO*			io;
 
 	// Q
 	uint32_t	qval;
@@ -96,17 +93,17 @@ struct Filter {
 	float			envspeed_decay;
 
 	// Filter
-	FilterSetting 	filter_mode 	= TwoPass;
-	float 			SAMPLE_RATE		= 32000.0f;
-	float 			factor			= 10.0 * (SAMPLE_RATE / 96000.0);
-	float 			cCoeff 			= 2.0 * 3.14159265358979323846 / SAMPLE_RATE; 
+	FilterSetting 	filter_mode = TwoPass;
+	float 			SAMPLE_RATE	= 32000.0f;
+	float 			factor		= 10.0 * (SAMPLE_RATE / 96000.0);
+	float 			cCoeff 		= 2.0 * 3.14159265358979323846 / SAMPLE_RATE; 
 
 	void configure(IO *_io);
 
-	float CROSSFADE_POINT 	= 4095.0f * 2.0f / 3.0f;
-	float CROSSFADE_WIDTH 	= 1800.0f;
-	float CROSSFADE_MIN 	= CROSSFADE_POINT - CROSSFADE_WIDTH / 2.0f;
-	float CROSSFADE_MAX 	= CROSSFADE_POINT + CROSSFADE_WIDTH / 2.0f;
+	float CROSSFADE_POINT = 4095.0f * 2.0f / 3.0f;
+	float CROSSFADE_WIDTH = 1800.0f;
+	float CROSSFADE_MIN = CROSSFADE_POINT - CROSSFADE_WIDTH / 2.0f;
+	float CROSSFADE_MAX = CROSSFADE_POINT + CROSSFADE_WIDTH / 2.0f;
 
 	// filter output
 	float filter_out[NUM_SAMPLES];
@@ -118,9 +115,9 @@ struct Filter {
 	float buf_a[3]; 
 
    	// Filter parameters
-	float qval_b	= 0.0f;	
-	float qval_a	= 0.0f; 	
-	float qc		= 0.0f;
+	float qval_b = 0.0f;	
+	float qval_a = 0.0f; 	
+	float qc	 = 0.0f;
 
 	void update_env();
 	void update_q();
@@ -130,25 +127,22 @@ struct Filter {
 	void filter();
 	void onepass();
 	void twopass();
-
 };
 
 struct IO {
-
-	int16_t					Q_LEVEL;
-	int16_t					Q_CONTROL;
-	FilterSetting			FILTER_SWITCH;
-	EnvelopeMode			ENV_SWITCH;
-	float					FREQ;
+	int16_t			Q_LEVEL;
+	int16_t			Q_CONTROL;
+	FilterSetting	FILTER_SWITCH;
+	EnvelopeMode	ENV_SWITCH;
+	float			FREQ;
 
 	// Audio
-	int32_t					in[NUM_SAMPLES] = {}; 
-	int32_t					out[NUM_SAMPLES] = {}; 
+	int32_t			in[NUM_SAMPLES] = {}; 
+	int32_t			out[NUM_SAMPLES] = {}; 
 
 	// OUTPUTS
-	float					env_out;
- 	float					DEBUG[16];
-
+	float			env_out;
+ 	float			DEBUG[16];
 };
 
 }

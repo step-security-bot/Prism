@@ -263,6 +263,7 @@ struct RainbowScaleExpander : core::PrismModule {
 	std::string parameterDescriptions[NUM_PAGES][NUM_PARAMETERS] = {};
 
 	gui::PrismReadoutParam *widgetRef[NUM_PARAMETERS] = {};
+	// std::vector<gui::PrismReadoutParam*> widgetRef(NUM_PARAMETERS, nullptr);
 
 	std::string path;
 
@@ -271,7 +272,6 @@ struct RainbowScaleExpander : core::PrismModule {
 
 	const float CtoF48 = 48000.0f / (2.0f * core::PI);
 	const float FtoC48 = (2.0f * core::PI) / 48000.0f;
-
 
 	float currFreqs[NUM_BANKNOTES] = {};
 	int currState[NUM_BANKNOTES] = {};
@@ -288,7 +288,6 @@ struct RainbowScaleExpander : core::PrismModule {
 	std::string notedesc[231] = {};
 
     ScaleSet scales;
-
 	ScalaFile scala;
 
 	json_t *dataToJson() override {
@@ -574,7 +573,7 @@ struct RainbowScaleExpander : core::PrismModule {
 		configParam(BANK_PARAM, 0, 21, 0, "Bank presets"); 
 		configParam(BANKLOAD_PARAM, 0, 1, 0, "Load preset"); 
 
-		configSwitch(PAGE_PARAM, 0, NUM_PAGES - 1, 1, "Select page", {"Frequency", "ET", "JI"}); 
+		configSwitch(PAGE_PARAM, 0, NUM_PAGES - 1, 1, "Select page", {"Frequency", "ET", "JI"})->randomizeEnabled = false; 
 		configSwitch(CALC_PARAM, 0, 1, 0, "Calculate", {"Single note", "All"}); 
 		configSwitch(STACKMODE_PARAM, 0, 1, 0, "Calculate interval", {"per octave", "stack intervals"}); 
 		configParam(EXECUTE_PARAM, 0, 1, 0, "Set frequencies in scale"); 
@@ -592,6 +591,7 @@ struct RainbowScaleExpander : core::PrismModule {
 	void populateWidgetData() {
 		for (int i = 0; i < NUM_PARAMETERS; i++) {
 			if (widgetRef[i] && parameterActive[currPage][i]) {
+			// if (widgetRef[i]) {
 				widgetRef[i]->isActive 	= parameterActive[currPage][i];
 				widgetRef[i]->title 	= parameterLabels[currPage][i];
 			}
@@ -1092,9 +1092,8 @@ struct FrequencyDisplay : TransparentWidget {
 		fontPath = asset::plugin(pluginInstance, "res/RobotoCondensed-Regular.ttf");
 	}
 
-	// void draw(const DrawArgs &ctx) override {
 	void drawLayer(const DrawArgs& ctx, int layer) override {
-		if (layer != 1 || !module || (!module->stepX % 60 != 0)) return;
+		if (layer != 1 || !module || ((!module->stepX % 60) != 0)) return;
 
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font && font->handle >= 0) {		
@@ -1210,10 +1209,10 @@ struct ExpanderBankWidget : Widget {
 	};
 
 	// Gamma
-	NVGcolor extraColour = nvgRGBf(245.0f/255.0f,  245.0f/255.0f, 090.0f/255.0f );
+	NVGcolor extraColour = nvgRGBf(245.0f/255.0f, 245.0f/255.0f, 090.0f/255.0f );
 
 	void drawLayer(const DrawArgs& ctx, int layer) override {
-		if (module == NULL) return;
+		if (!module) return;
 
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font && font->handle >= 0) {
@@ -1346,8 +1345,8 @@ struct RainbowScaleExpanderWidget : ModuleWidget {
 			displayW->module = module;
 			addChild(displayW);
 
-			ExpanderBankWidget *bankW = createWidget<ExpanderBankWidget>(ink2vcv(111.722f,24.382f));
-			bankW->box.size = Vec(80.0, 20.0f);
+			ExpanderBankWidget *bankW = createWidget<ExpanderBankWidget>(ink2vcv(111.722f, 24.382f));
+			bankW->box.size = Vec(80.0f, 20.0f);
 			bankW->module = module;
 			addChild(bankW);
 		}

@@ -30,9 +30,9 @@
 
 using namespace rainbow;
 
-uint32_t diff(uint32_t a, uint32_t b) {
-	return (a > b) ? (a - b) : (b - a);
-}
+// uint32_t diff(uint32_t a, uint32_t b) {
+// 	return (a > b) ? (a - b) : (b - a);
+// }
 
 void LPF::setup_fir_filter() {
 

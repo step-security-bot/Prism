@@ -90,7 +90,7 @@ enum EnvelopeMode {
 	Trigger
 };
 
-uint32_t diff(uint32_t a, uint32_t b);
+// uint32_t diff(uint32_t a, uint32_t b);
 
 struct TFilter;
 struct MaxQFilter;
@@ -111,7 +111,6 @@ struct Levels;
 struct State;
 
 struct Audio {
-
 	const float MIN_12BIT = -16777216.0f;
 	const float MAX_12BIT = 16777215.0f;
 
@@ -151,18 +150,15 @@ struct Audio {
 	dsp::Frame<6> outputFrame6 = {};
 	dsp::Frame<6> outputFrames6[NUM_SAMPLES] = {};
 
-
    	float generateNoise();
 	void ChannelProcess1(rainbow::IO &io, rack::engine::Input &input, rack::engine::Output &output, rainbow::FilterBank &filterbank);
 	void ChannelProcess2(rainbow::IO &io, rack::engine::Input &input, rack::engine::Output &output, rainbow::FilterBank &filterbank);
 	void ChannelProcess6(rainbow::IO &io, rack::engine::Input &input, rack::engine::Output &output, rainbow::FilterBank &filterbank);
-
 };
 
 struct Envelope {
-
-	Levels *	levels;
-	IO *		io;
+	Levels*	levels;
+	IO*		io;
 
 	const float MIN_VOCT = -10.0f/3.0f;
 	const float MAX_VOCT = 4.75f;
@@ -173,7 +169,7 @@ struct Envelope {
 	float envout_preload_voct[NUM_CHANNELS];
 
 	// Private
-	float stored_trigger_level[NUM_CHANNELS] = {0, 0, 0, 0, 0, 0};
+	float stored_trigger_level[NUM_CHANNELS] = {};
 	float envelope[NUM_CHANNELS];
 	uint32_t env_trigout[NUM_CHANNELS];
 	uint32_t env_low_ctr[NUM_CHANNELS];
@@ -181,21 +177,18 @@ struct Envelope {
 	uint32_t env_update_ctr = UINT32_MAX;
 	uint32_t ENV_UPDATE_RATE = 50;
 
-	bool			env_prepost_mode; // false = pre
-	EnvOutModes		env_track_mode;
-	float			envspeed_attack;
-	float			envspeed_decay;
+	bool		env_prepost_mode; // false = pre
+	EnvOutModes	env_track_mode;
+	float		envspeed_attack;
+	float		envspeed_decay;
 
 	void configure(IO *_io, Levels *_levels);
-
 	void initialise(void);
 	void update();
 	float freqCoeftoVOct(float k);
-
 };
 
 struct TFilter {
-
 	virtual void reset(FilterBank *fb) = 0;
 	virtual void filter(FilterBank *fb, int channel_num, float **filter_out) = 0;
 
@@ -208,12 +201,11 @@ struct TFilter {
 };
 
 struct MaxQFilter : TFilter {
-
 	// filter buffer
-	float buf[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
+	float buf[NUM_SCALES][NUM_FILTS][3] = {}; 
 
 	// buffer for first filter of two-pass
-	float buf_a[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
+	float buf_a[NUM_SCALES][NUM_FILTS][3] = {}; 
 
    	// Filter parameters
 	float qval_b = 0.0f;	
@@ -225,13 +217,11 @@ struct MaxQFilter : TFilter {
 
 	void onepass(FilterBank *fb, int channel_num, float **filter_out);
 	void twopass(FilterBank *fb, int channel_num, float **filter_out);
-
 };
 
 struct BpreFilter : TFilter {
-
 	// filter buffer
-	float buf[NUM_SCALES][NUM_FILTS][3] = {{{}}}; 
+	float buf[NUM_SCALES][NUM_FILTS][3] = {}; 
 
    	// Filter parameters
 	float qval_b = 0.0f;	
@@ -240,21 +230,19 @@ struct BpreFilter : TFilter {
 
 	void reset(FilterBank *fb) override;
 	void filter(FilterBank *fb, int channel_num, float **filter_out) override;
-
 };
 
 struct Filter {
-
 	// filter buffer
-	float buf[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {{{{}}}}; 
+	float buf[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {};
 
 	// buffer for first filter of two-pass
-	float buf_a[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {{{{}}}}; 
+	float buf_a[NUM_CHANNELS][NUM_SCALES][NUM_FILTS][3] = {}; 
 
    	// Filter parameters
-	float qval_b[NUM_CHANNELS]   = {0, 0, 0, 0, 0, 0};	
-	float qval_a[NUM_CHANNELS]   = {0, 0, 0, 0, 0, 0};	
-	float qc[NUM_CHANNELS]   	 = {0, 0, 0, 0, 0, 0};
+	float qval_b[NUM_CHANNELS] = {};	
+	float qval_a[NUM_CHANNELS] = {};	
+	float qc[NUM_CHANNELS] = {};
 
 	float CROSSFADE_POINT = 4095.0f * 2.0f / 3.0f;
 	float CROSSFADE_WIDTH = 1800.0f;
@@ -267,17 +255,15 @@ struct Filter {
 	void filter_bpre(FilterBank *fb, float **filter_out);
 
 	void reset_buffer(int i, bool twopass);
-
 };
 
 struct FilterBank {
-
-	Rotation *		rotation;
-	Envelope *		envelope;
-	Q *				q;
-	Tuning *		tuning;
-	IO *			io;
-	Levels *		levels;
+	Rotation*	rotation;
+	Envelope*	envelope;
+	Q*			q;
+	Tuning*		tuning;
+	IO*			io;
+	Levels*		levels;
 
 	// Filter		filter;
 	std::array<MaxQFilter, NUM_CHANNELS> maxq;
@@ -300,9 +286,9 @@ struct FilterBank {
 	uint8_t old_scale_bank[NUM_CHANNELS] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 	// filter coefficients
-	float *c_hiq[NUM_CHANNELS];
-	float *c_loq[NUM_CHANNELS];
-	float *bpretuning[NUM_CHANNELS];
+	float *c_hiq[NUM_CHANNELS] {};
+	float *c_loq[NUM_CHANNELS] {};
+	float *bpretuning[NUM_CHANNELS] {};
 
 	float userscale_bank96[231];
 	float userscale_bank48[231];
@@ -324,109 +310,105 @@ struct FilterBank {
 	void set_default_user_scalebank();
 
 	void update_slider_leds(void);
-
 };
 
 struct IO {
+	bool				UI_UPDATE;
+	bool				HICPUMODE;
+	bool				READCOEFFS = true;
 
-	bool					UI_UPDATE;
-	bool					HICPUMODE;
-	bool					READCOEFFS = true;
+	uint16_t			MORPH_ADC;
 
-	uint16_t				MORPH_ADC;
+	int16_t				GLOBAL_Q_LEVEL;
+	int16_t				GLOBAL_Q_CONTROL;
+	int16_t				CHANNEL_Q_LEVEL[NUM_CHANNELS];
+	int16_t				CHANNEL_Q_CONTROL[NUM_CHANNELS];
 
-	int16_t					GLOBAL_Q_LEVEL;
-	int16_t					GLOBAL_Q_CONTROL;
-	int16_t					CHANNEL_Q_LEVEL[NUM_CHANNELS];
-	int16_t					CHANNEL_Q_CONTROL[NUM_CHANNELS];
+	float				GLOBAL_LEVEL_ADC;
+	float				GLOBAL_LEVEL_CV;
+	float				LEVEL_ADC[NUM_CHANNELS];
+	float				LEVEL_CV[NUM_CHANNELS];
 
-	float					GLOBAL_LEVEL_ADC;
-	float					GLOBAL_LEVEL_CV;
-	float					LEVEL_ADC[NUM_CHANNELS];
-	float					LEVEL_CV[NUM_CHANNELS];
+	int16_t				FREQNUDGE1_ADC;
+	int16_t				FREQNUDGE6_ADC;
 
-	int16_t					FREQNUDGE1_ADC;
-	int16_t					FREQNUDGE6_ADC;
+	uint16_t			SLEW_ADC;
+	uint16_t			SCALE_ADC;
+	uint16_t			SPREAD_ADC;
+	uint16_t			ROTCV_ADC;
 
-	uint16_t				SLEW_ADC;
-	uint16_t				SCALE_ADC;
-	uint16_t				SPREAD_ADC;
-	uint16_t				ROTCV_ADC;
+	float				FREQCV1_CV[3];
+	int					FREQCV1_CHAN;
 
-	float					FREQCV1_CV[3];
-	int						FREQCV1_CHAN;
+	float				FREQCV6_CV[3];
+	int					FREQCV6_CHAN;
 
-	float					FREQCV6_CV[3];
-	int						FREQCV6_CHAN;
+	FilterSetting		FILTER_SWITCH;
+	Mod135Setting		MOD135_SWITCH;
+	Mod246Setting		MOD246_SWITCH;
+	bool				SCALEROT_SWITCH;
+	bool				PREPOST_SWITCH;
+	bool				GLIDE_SWITCH;
+	EnvelopeMode		ENV_SWITCH;
 
-	FilterSetting			FILTER_SWITCH;
-	Mod135Setting			MOD135_SWITCH;
-	Mod246Setting			MOD246_SWITCH;
-	bool					SCALEROT_SWITCH;
-	bool					PREPOST_SWITCH;
-	bool					GLIDE_SWITCH;
-	EnvelopeMode			ENV_SWITCH;
-
-	bool					CHANNEL_Q_ON[NUM_CHANNELS] = { false };
-	bool					LOCK_ON[NUM_CHANNELS] = { false };
-	int8_t					TRANS_DIAL[NUM_CHANNELS];
+	bool				CHANNEL_Q_ON[NUM_CHANNELS] = { false };
+	bool				LOCK_ON[NUM_CHANNELS] = { false };
+	int8_t				TRANS_DIAL[NUM_CHANNELS];
 
 	// CV Rotate
-	bool					ROTUP_TRIGGER;
-	bool					ROTDOWN_TRIGGER;
+	bool				ROTUP_TRIGGER;
+	bool				ROTDOWN_TRIGGER;
 
 	// Button Rotate
-	bool					ROTUP_BUTTON;
-	bool					ROTDOWN_BUTTON;
+	bool				ROTUP_BUTTON;
+	bool				ROTDOWN_BUTTON;
 
 	// Button scale
-	bool					SCALEUP_BUTTON;
-	bool					SCALEDOWN_BUTTON;
+	bool				SCALEUP_BUTTON;
+	bool				SCALEDOWN_BUTTON;
 
 	// Bank select
-	bool					CHANGED_BANK;
-	uint8_t					NEW_BANK;
-	float					USERSCALE96[NUM_BANKNOTES];
-	float					USERSCALE48[NUM_BANKNOTES];
-	bool					USERSCALE_CHANGED = false;
+	bool				CHANGED_BANK;
+	uint8_t				NEW_BANK;
+	float				USERSCALE96[NUM_BANKNOTES];
+	float				USERSCALE48[NUM_BANKNOTES];
+	bool				USERSCALE_CHANGED = false;
 
 	//FREQ BLOCKS
-	std::bitset<20>			FREQ_BLOCK;
+	std::bitset<20>		FREQ_BLOCK;
 
 	// Audio
-	int32_t					in[NUM_CHANNELS][NUM_SAMPLES] = {}; 
-	int32_t					out[NUM_CHANNELS][NUM_SAMPLES] = {}; 
+	int32_t				in[NUM_CHANNELS][NUM_SAMPLES] = {}; 
+	int32_t				out[NUM_CHANNELS][NUM_SAMPLES] = {}; 
 
 	// OUTPUTS
-	float					env_out[NUM_CHANNELS];
-	float					voct_out[NUM_CHANNELS];
-	float					OUTLEVEL[NUM_SCALES];
+	float				env_out[NUM_CHANNELS];
+	float				voct_out[NUM_CHANNELS];
+	float				OUTLEVEL[NUM_SCALES];
 
 	// LEDS
-	bool					INPUT_CLIP;
+	bool				INPUT_CLIP;
 	
-	float					ring[NUM_FILTS][3];
-	float					scale[NUM_SCALES][3];
+	float				ring[NUM_FILTS][3];
+	float				scale[NUM_SCALES][3];
 
-	float					envelope_leds[NUM_CHANNELS][3];
-	float					q_leds[NUM_CHANNELS][3];
-	float					tuning_out_leds[NUM_CHANNELS][3];
+	float				envelope_leds[NUM_CHANNELS][3];
+	float				q_leds[NUM_CHANNELS][3];
+	float				tuning_out_leds[NUM_CHANNELS][3];
 
-	float					channelLevel[NUM_CHANNELS]; // 0.0 - 1+, 1 = Clipping
+	float				channelLevel[NUM_CHANNELS]; // 0.0 - 1+, 1 = Clipping
 
-	bool					FORCE_RING_UPDATE = true;
+	bool				FORCE_RING_UPDATE = true;
  
-	float					DEBUG[16];
-
+	float				DEBUG[16];
 };
 
 struct LEDRing {
-
-	Rotation *		rotation;
-	Envelope *		envelope;
-	IO *			io;
-	FilterBank *	filterbank;
-	Q *				q;
+	Rotation*	rotation;
+	Envelope*	envelope;
+	IO*			io;
+	FilterBank*	filterbank;
+	Q*			q;
 
 	const float sqrt2over2			= sqrt(2.0f) / 2.0f;
 	const float sqrt2				= sqrt(2.0f);
@@ -437,16 +419,9 @@ struct LEDRing {
 	uint8_t filter_flash_ctr		= 0;
 	uint32_t led_ring_update_ctr	= UINT32_MAX; // Initialise to always fire on first pass 
 	uint8_t flash_ctr				= 0;
-	uint8_t elacs_ctr[NUM_SCALES]	= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	uint8_t elacs_ctr[NUM_SCALES]	= {};
 	
 	float channel_led_colors[NUM_CHANNELS][3] = {
-		// {255.0f/255.0f,	 100.0f/255.0f,  100.0f/255.0f}, // Red
-		// {255.0f/255.0f,	 255.0f/255.0f,  100.0f/255.0f}, // Yellow
-		// {100.0f/255.0f,	 255.0f/255.0f,  100.0f/255.0f}, // Green
-		// {100.0f/255.0f,	 255.0f/255.0f,  255.0f/255.0f}, // Cyan	  
-		// {100.0f/255.0f,	 100.0f/255.0f,  255.0f/255.0f}, // Blue
-		// {255.0f/255.0f,	 100.0f/255.0f,  255.0f/255.0f}, // Magenta
-
 		// New palette by Pyer
 		{242.0f/255.0f,	 100.0f/255.0f,  127.0f/255.0f}, // Red
 		{255.0f/255.0f,	 228.0f/255.0f,  153.0f/255.0f}, // Yellow
@@ -466,13 +441,12 @@ struct LEDRing {
 };
 
 struct Inputs {
-
-	Rotation *		rotation;
-	Envelope *		envelope;
-	IO *			io;
-	FilterBank *	filterbank;
-	Tuning *		tuning;
-	Levels *		levels;
+	Rotation*		rotation;
+	Envelope*		envelope;
+	IO*				io;
+	FilterBank*		filterbank;
+	Tuning*			tuning;
+	Levels*			levels;
 
 	float SCALECV_LPF				= 0.99f;
 	uint32_t SPREAD_ADC_HYSTERESIS	= 75;
@@ -493,12 +467,10 @@ struct Inputs {
 	int8_t read_spread(void);
 	void process_rotateCV(void);
 	void process_scaleCV(void);
-
 };
 
 
 struct LPF {
-
 	//Value outputs:
 	float				raw_val;
 	float				lpf_val;
@@ -517,13 +489,11 @@ struct LPF {
 	void setup_fir_filter();
 	void apply_fir_lpf();
 	void apply_bracket();
-
 };
 
 struct Rotation {
-
-	FilterBank *	filterbank;
-	IO *			io;
+	FilterBank*	filterbank;
+	IO*			io;
 
 	uint16_t rotate_to_next_scale;
 
@@ -536,9 +506,9 @@ struct Rotation {
 
 	int8_t motion_notejump;
 	int8_t motion_scale_dest[NUM_CHANNELS];
-	int8_t motion_scalecv_overage[NUM_CHANNELS]		= {0, 0, 0, 0, 0, 0};
+	int8_t motion_scalecv_overage[NUM_CHANNELS]		= {};
 
-	float motion_morphpos[NUM_CHANNELS]				= {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	float motion_morphpos[NUM_CHANNELS]				= {};
 
 	float f_morph									= 0.0;
 
@@ -567,37 +537,33 @@ struct Rotation {
 	bool is_spreading(void);
 
 	void jump_rotate_with_cv(int8_t shift_amt);
-
 };
 
 struct Q {
-
-	IO *	io;
+	IO*	io;
 
 	//Q POT AND CV
-	uint32_t	qval[NUM_CHANNELS];
-	float		qval_goal[NUM_CHANNELS]		= {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	float		prev_qval[NUM_CHANNELS]		= {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	uint32_t qval[NUM_CHANNELS];
+	float	 qval_goal[NUM_CHANNELS]	= {};
+	float	 prev_qval[NUM_CHANNELS]	= {};
 	
-	float		global_lpf;
-	float		qlockpot_lpf[NUM_CHANNELS]	= {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+	float	 global_lpf;
+	float	 qlockpot_lpf[NUM_CHANNELS]	= {};
 
-	uint32_t q_update_ctr					= UINT32_MAX; // Initialise to always fire on first pass 
-   	uint32_t Q_UPDATE_RATE					= 50; 
+	uint32_t q_update_ctr				= UINT32_MAX; // Initialise to always fire on first pass 
+   	uint32_t Q_UPDATE_RATE				= 50; 
 
-	uint32_t QPOT_MIN_CHANGE				= 100;
-	float Q_LPF_96							= 0.95f;
-	float Q_LPF_48							= 0.90f;
+	uint32_t QPOT_MIN_CHANGE			= 100;
+	float Q_LPF_96						= 0.95f;
+	float Q_LPF_48						= 0.90f;
 
 	void configure(IO *_io);
 	void update(void);
-
 };
 
 struct Tuning {
-
-	FilterBank *	filterbank;
-	IO *			io;
+	FilterBank*	filterbank;
+	IO*			io;
 
 	//FREQ NUDGE/LOCK JACKS
 	float freq_nudge[NUM_CHANNELS]	= {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
@@ -622,45 +588,40 @@ struct Tuning {
 
 	LPF freq_jack_conditioning[2];	//LPF and bracketing for freq jacks
 
-	void configure(IO *_io, FilterBank * _filter);
+	void configure(IO *_io, FilterBank *_filter);
 
 	void initialise(void);
 	void update(void);
-
 };
 
 struct Levels {
-
-	IO *	io;
+	IO*	io;
 
 	//CHANNEL LEVELS/SLEW
-	float channel_level[NUM_CHANNELS] = {0, 0, 0, 0, 0, 0};
+	float channel_level[NUM_CHANNELS] = {};
 
-	float CHANNEL_LEVEL_MIN_LPF			= 0.75f;
-	float channel_level_lpf				= CHANNEL_LEVEL_MIN_LPF;
+	float CHANNEL_LEVEL_MIN_LPF		  = 0.75f;
+	float channel_level_lpf			  = CHANNEL_LEVEL_MIN_LPF;
 
 	float global_cv_lpf;
 	float level_cv_lpf[6];
 
 	// Private
-	uint32_t level_update_ctr			= UINT32_MAX; // Initialise to always fire on first pass
-	uint32_t LEVEL_UPDATE_RATE			= 50; 
-	uint32_t SLIDER_CHANGE_MIN			= 20;
-	float SLIDER_LPF_MIN				= 0.007f;
-	float LEVEL_RATE					= 50.0f;
+	uint32_t level_update_ctr		  = UINT32_MAX; // Initialise to always fire on first pass
+	uint32_t LEVEL_UPDATE_RATE		  = 50; 
+	uint32_t SLIDER_CHANGE_MIN		  = 20;
+	float SLIDER_LPF_MIN			  = 0.007f;
+	float LEVEL_RATE				  = 50.0f;
 
-	float prev_level[NUM_CHANNELS]		= {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-	float level_goal[NUM_CHANNELS]		= {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
-	float level_inc[NUM_CHANNELS]		= {0, 0, 0, 0, 0, 0};
+	float prev_level[NUM_CHANNELS]	  = {};
+	float level_goal[NUM_CHANNELS]	  = {};
+	float level_inc[NUM_CHANNELS]	  = {};
 
 	void configure(IO *_io);
-
 	void update(void);
-
 };
 
 struct State {
-
 	bool initialised = false;
 
 	uint8_t note[NUM_CHANNELS] = {};
@@ -671,7 +632,6 @@ struct State {
 
 	FilterTypes filter_type;
 	FilterModes filter_mode;
-
 };
 
-}
+} // rainbow
