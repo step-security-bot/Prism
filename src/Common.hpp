@@ -7,7 +7,6 @@
 #include "componentlibrary.hpp"
 
 namespace prism {
-
 namespace core {
 
 const double PI = 3.14159265358979323846264338327950288;
@@ -37,7 +36,6 @@ struct PrismModule : rack::Module {
 	void step() override {
 		stepX++;
 	}
-	
 };
 
 } // namespace core
@@ -161,13 +159,13 @@ struct PrismPort : app::SvgPort {
 
 
 struct PrismReadoutParam : app::ParamWidget {
-
 	widget::FramebufferWidget *fb;
 	widget::SvgWidget *sw;
 	std::shared_ptr<Font> font;
 
 	bool isActive = true;
-	std::string title = "";
+	std::string title;
+	std::string value;
 
 	PrismReadoutParam() {
 		fb = new widget::FramebufferWidget;
@@ -228,26 +226,25 @@ struct PrismReadoutParam : app::ParamWidget {
 		ParamWidget::draw(ctx);
 
 		if (paramQuantity && font) {
-
 			Vec pos = Vec(5, 15);
 
 			nvgFontSize(ctx.vg, 17.0f);
 			nvgFontFaceId(ctx.vg, font->handle);
 
-			char text[128];
-
-			snprintf(text, sizeof(text), "%s", title.c_str());
-			nvgText(ctx.vg, pos.x, pos.y, text, NULL);
+			// char text[128];
+			// snprintf(text, sizeof(text), "%s", title.c_str());
+			// std::string text = string::f("%s", title.c_str());
+			nvgText(ctx.vg, pos.x, pos.y, title.c_str(), NULL);
 
 			if (!isActive) {
 				nvgFillColor(ctx.vg, nvgRGBA(0x80, 0x80, 0x80, 0xFF));
 			}
 
-			snprintf(text, sizeof(text), "%.3f", paramQuantity->getValue());
-			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
+			// snprintf(text, sizeof(text), "%.3f", paramQuantity->getValue());
+			value = string::f("%.3f", paramQuantity->getValue());
+			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
 	}
-
 };
 
 struct FloatReadout : PrismReadoutParam {
@@ -262,22 +259,22 @@ struct FloatReadout : PrismReadoutParam {
 		ParamWidget::draw(ctx);
 
 		if (paramQuantity && font) {
-
 			Vec pos = Vec(5, 15);
 
 			nvgFontFaceId(ctx.vg, font->handle);
 
-			char text[128];
+			// char value[128];
 
-			nvgFontSize(ctx.vg, 14.0f);
 			#ifdef USING_CARDINAL_NOT_RACK
 			if (!settings::darkMode)
 				nvgFillColor(ctx.vg, nvgRGBA(0x41, 0x41, 0x41, 0xFF));
 			else
 			#endif
 				nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
-			snprintf(text, sizeof(text), "%s", title.c_str());
-			nvgText(ctx.vg, pos.x, pos.y, text, NULL);
+
+			nvgFontSize(ctx.vg, 14.0f);
+			// snprintf(text, sizeof(text), "%s", title.c_str());
+			nvgText(ctx.vg, pos.x, pos.y, title.c_str(), NULL);
 
 			if (isActive) {
 				nvgFillColor(ctx.vg, nvgRGBA(0xff, 0xff, 0xff, 0xFF));
@@ -286,11 +283,12 @@ struct FloatReadout : PrismReadoutParam {
 			}
 
 			nvgFontSize(ctx.vg, 17.0f);
-			snprintf(text, sizeof(text), "%.3f", paramQuantity->getValue());
-			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
+			// snprintf(value, sizeof(value), "%.3f", paramQuantity->getValue());
+			// nvgText(ctx.vg, pos.x, pos.y + 19.5, value, NULL);
+			value = string::f("%.3f", paramQuantity->getValue());
+			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
 	}
-
 };
 
 struct IntegerReadout : PrismReadoutParam {
@@ -305,21 +303,20 @@ struct IntegerReadout : PrismReadoutParam {
 		ParamWidget::draw(ctx);
 
 		if (paramQuantity && font) {
-
 			Vec pos = Vec(5, 15);
 
-			nvgFontSize(ctx.vg, 17.0f);
 			nvgFontFaceId(ctx.vg, font->handle);
 
-			char text[128];
 			#ifdef USING_CARDINAL_NOT_RACK
 			if (!settings::darkMode)
 				nvgFillColor(ctx.vg, nvgRGBA(0x41, 0x41, 0x41, 0xFF));
 			else
 			#endif
 				nvgFillColor(ctx.vg, nvgRGBA(0xBE, 0xBE, 0xBE, 0xFF));
-			snprintf(text, sizeof(text), "%s", title.c_str());
-			nvgText(ctx.vg, pos.x, pos.y, text, NULL);
+
+			nvgFontSize(ctx.vg, 17.0f);
+			// snprintf(text, sizeof(text), "%s", title.c_str());
+			nvgText(ctx.vg, pos.x, pos.y, title.c_str(), NULL);
 
 			if (isActive) {
 				nvgFillColor(ctx.vg, nvgRGBA(0xff, 0xff, 0xff, 0xFF));
@@ -327,16 +324,14 @@ struct IntegerReadout : PrismReadoutParam {
 				nvgFillColor(ctx.vg, nvgRGBA(0x00, 0x00, 0x00, 0xFF));
 			}
 
-			snprintf(text, sizeof(text), "%d", (int)paramQuantity->getValue());
-			nvgText(ctx.vg, pos.x, pos.y + 19.5, text, NULL);
+			// snprintf(text, sizeof(text), "%d", (int)paramQuantity->getValue());
+			value = string::f("%d", static_cast<int>(paramQuantity->getValue()));
+			nvgText(ctx.vg, pos.x, pos.y + 19.5, value.c_str(), NULL);
 		}
-	}
-	
+	}	
 };
 
-
 } // namespace gui
-
 } // namespace ah
 
 inline math::Vec ink2vcv(float x, float y) {

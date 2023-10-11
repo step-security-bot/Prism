@@ -12,11 +12,10 @@ using namespace rainbow;
 struct Rainbow;
 
 struct LED : LightWidget {
-
 	NVGcolor color;
 	NVGcolor colorBorder;
 
-	Rainbow *module = NULL;
+	Rainbow *module {};
 
 	int id;
 
@@ -223,7 +222,6 @@ struct Rainbow : core::PrismModule {
 	}
 
 	json_t *dataToJson() override {
-
 		json_t *rootJ = json_object();
 
 		// highcpu
@@ -302,8 +300,7 @@ struct Rainbow : core::PrismModule {
 	}
 
 	void dataFromJson(json_t *rootJ) override {
-
-		// gliss
+		// highcpu
 		json_t *cpuJ = json_object_get(rootJ, "highcpu");
 		if (cpuJ) {
 			setCPUMode(json_integer_value(cpuJ));
@@ -319,7 +316,7 @@ struct Rainbow : core::PrismModule {
 		if (prepostJ)
 			io.PREPOST_SWITCH = json_integer_value(prepostJ);
 
-		// gliss
+		// scale rotation
 		json_t *scalerotJ = json_object_get(rootJ, "scalerot");
 		if (scalerotJ)
 			io.SCALEROT_SWITCH = json_integer_value(scalerotJ);
@@ -501,8 +498,6 @@ struct Rainbow : core::PrismModule {
 		tuning.configure(&io, &filterbank);
 		levels.configure(&io);
 		input.configure(&io, &rotation, &envelope, &filterbank, &tuning, &levels);
-
-		// initialise(); // gets called by onReset()
 
 		rightExpander.producerMessage = pMessage;
 		rightExpander.consumerMessage = cMessage;
@@ -1036,7 +1031,7 @@ void LED::onButton(const event::Button &e) {
 struct BankWidget : Widget {
 
 	std::string fontPath;
-	Rainbow *module = NULL;
+	Rainbow *module {};
 	ScaleSet scales;
 	NVGcolor colors[NUM_SCALEBANKS] = {
 
@@ -1076,29 +1071,28 @@ struct BankWidget : Widget {
 	}
 
 	void drawLayer(const DrawArgs& ctx, int layer) override {
-		if (layer != 1) return;
-		if (module == NULL) return;
+		if (layer != 1 || !module) return;
 		
 		std::shared_ptr<Font> font = APP->window->loadFont(fontPath);
 		if (font) {
 			nvgFontSize(ctx.vg, 12.0f);
 			nvgFontFaceId(ctx.vg, font->handle);
 
-			char text[128];
+			std::string text;
 
 			if (module->currBank == module->nextBank) {
 				nvgFillColor(ctx.vg, colors[module->currBank]);
-				snprintf(text, sizeof(text), "%s", scales.presets[module->currBank]->name.c_str());
+				// snprintf(text, sizeof(text), "%s", scales.presets[module->currBank]->name.c_str());
+				text = string::f("%s", scales.presets[module->currBank]->name.c_str());
 			} else {
 				nvgFillColor(ctx.vg, colors[module->nextBank]);
-				snprintf(text, sizeof(text), "%s*", scales.presets[module->nextBank]->name.c_str());
+				// snprintf(text, sizeof(text), "%s*", scales.presets[module->nextBank]->name.c_str());
+				text = string::f("%s", scales.presets[module->nextBank]->name.c_str());
 			}
-
-			nvgText(ctx.vg, 5, 13, text, NULL);
+			nvgText(ctx.vg, 5, 13, text.c_str(), NULL);
 		}
 		Widget::drawLayer(ctx, layer);
 	}
-
 };
 
 struct RainbowWidget : ModuleWidget {

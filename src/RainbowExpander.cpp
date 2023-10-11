@@ -285,8 +285,8 @@ struct RainbowScaleExpander : core::PrismModule {
 	int currPage = 0; // Freq = 0, ET = 1, JI = 2
 	int prevPage = 0;
 
-	std::string name = "";
-	std::string description = "";
+	std::string name;
+	std::string description;
 	std::string scalename[11] = {};
 	std::string notedesc[231] = {};
 
@@ -572,12 +572,12 @@ struct RainbowScaleExpander : core::PrismModule {
 	rack::dsp::SchmittTrigger executeTrigger;
 
 	RainbowScaleExpander() : core::PrismModule(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		configParam(TRANSFER_PARAM, 0, 1, 0, "Load scales into Rainbow");
+		configButton(TRANSFER_PARAM, "Load scales into Rainbow");
 		configParam(SCALE_PARAM, 0, 10, 0, "Select scale from bank");
 		configParam(SLOT_PARAM, 0, 20, 0, "Select note in scale");
 
 		configParam(BANK_PARAM, 0, 21, 0, "Bank presets"); 
-		configParam(BANKLOAD_PARAM, 0, 1, 0, "Load preset"); 
+		configButton(BANKLOAD_PARAM, "Load preset"); 
 
 		configSwitch(PAGE_PARAM, 0, NUM_PAGES - 1, 1, "Select page", {"Frequency", "ET", "JI"}); 
 		configSwitch(CALC_PARAM, 0, 1, 0, "Calculate", {"Single note", "All"}); 
