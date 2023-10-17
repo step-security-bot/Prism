@@ -18,8 +18,8 @@ struct LED : LightWidget {
 	Rainbow *module {};
 
 	int id;
-	float ledRadius = 5.0f;
-	float ledStrokeWidth = 1.0f;
+	const float ledRadius = 5.0f;
+	const float ledStrokeWidth = 1.0f;
 	float xCenter;
 	float yCenter;
 
@@ -143,11 +143,11 @@ struct Rainbow : core::PrismModule {
 	dsp::VuMeter2 vuMeters[6];
 	dsp::ClockDivider lightDivider;
 	uint32_t channelClipCnt[6];
-	float clipLimit = -5.2895f; // Clip at 10V;
+	const float clipLimit = -5.2895f; // Clip at 10V;
 	int frameRate = 735; // 44100Hz / 60fps
 
-	NVGcolor defaultBorder = nvgRGB(73, 73, 73);
-	NVGcolor blockedBorder = nvgRGB(255, 0, 0);
+	const NVGcolor defaultBorder = nvgRGB(73, 73, 73);
+	const NVGcolor blockedBorder = nvgRGB(255, 0, 0);
 
 	Rotation	rotation;
 	Envelope 	envelope;
@@ -850,7 +850,7 @@ void Rainbow::process(const ProcessArgs &args) {
 				vuMeters[i].getBrightness(clipLimit, clipLimit) == 1.0f ? channelClipCnt[i]++ : channelClipCnt[i] = 0;
 			}
 
-			if (channelClipCnt[i] & 32) {
+			if ((channelClipCnt[i] & 32) && envelopeLEDs[i]) {
 				envelopeLEDs[i]->color = nvgRGBf(0.0f, 0.0f, 0.0f);
 				envelopeLEDs[i]->colorBorder = defaultBorder;
 			} else if (envelopeLEDs[i]) {
